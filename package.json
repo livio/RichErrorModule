@@ -1,0 +1,60 @@
+{
+  "author": {
+    "name": "Livio"
+  },
+  "bugs": {
+    "url": "http://github.com/livio/richErrorModule/issues"
+  },
+  "contributors": [
+    {
+    "name": "Scott Smereka",
+    "email": "scott@livio.io"
+    },
+    {
+      "name": "Nick Reno",
+      "email": "nick@livio.io"
+    }
+  ],
+  "dependencies": {
+    "i18next": "^3.4.1"
+  },
+  "description": "",
+  "devDependencies": {
+    "codecov.io": "^0.1.6",
+    "istanbul": "^0.3.20",
+    "mocha": "^2.3.3",
+    "should": "^7.1.0"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "keywords": [
+    "API",
+    "ENVELOPE",
+    "LIVIO",
+    "MICRO",
+    "MICROSERVICE",
+    "REPLY",
+    "RESPONSE",
+    "RICHERRORMODULE",
+    "SERVER",
+    "SERVICE"
+  ],
+  "licenses": [
+    {
+      "type": "BSD-3-Clause",
+      "url": "https://github.com/livio/richErrorModule/blob/master/license"
+    }
+  ],
+  "main": "./libs",
+  "name": "richErrorModule",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/livio/richErrorModule.git"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "version": "0.0.1"
+}
