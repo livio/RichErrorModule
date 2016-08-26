@@ -1,3 +1,17 @@
+/*
+/Rich-Error
+	/examples
+		richErrorTest.js
+	/libs
+		index.js
+	license
+	/node_modules
+		i18next
+	package.json
+	readme.md
+	/test
+		test.js
+		*/
 var RichError = require('../libs/index.js')
 var i18next = require('i18next')
 // creates a new Error instance
@@ -19,7 +33,13 @@ localeErr = 'server.400.forbidden'
 
 i18next.init({
 	lng: "en-US",
+  //nsSeparator: false,
 	keySeparator: false,
+  //load:['en-US', 'fr', 'es'],
+  //fallbackLng: 'en-US',
+  //backend: {
+  //  loadPath: '/language/static/{{lng}}/{{ns}}.json'
+  //},
   resources: {
     en: {
       translation: { // did a lot of searching, still unsure how this works
@@ -31,7 +51,10 @@ i18next.init({
       }
     }
   }
-})
+}//, (err, t) => {
+  //const hw = i18next.t('key'); // hw = 'hello world'
+//}
+)
 
 //creates a new instance of RichError
 var exampleRichError = new RichError(err, options, i18next, locale)

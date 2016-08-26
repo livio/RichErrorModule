@@ -1,1 +1,1 @@
-# RichErrorModule
+# Rich Error

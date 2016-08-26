@@ -7,8 +7,8 @@
   },
   "contributors": [
     {
-    "name": "Scott Smereka",
-    "email": "scott@livio.io"
+      "name": "Scott Smereka",
+      "email": "scott@livio.io"
     },
     {
       "name": "Nick Reno",
@@ -20,9 +20,10 @@
   },
   "description": "",
   "devDependencies": {
+    "chai": "^3.5.0",
     "codecov.io": "^0.1.6",
     "istanbul": "^0.3.20",
-    "mocha": "^2.3.3",
+    "mocha": "^2.5.3",
     "should": "^7.1.0"
   },
   "engines": {
@@ -43,7 +44,7 @@
   "licenses": [
     {
       "type": "BSD-3-Clause",
-      "url": "https://github.com/livio/richErrorModule/blob/master/license"
+      "url": "https://github.com/livio/RichErrorModule/blob/master/license"
     }
   ],
   "main": "./libs",
@@ -51,10 +52,10 @@
   "private": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/livio/richErrorModule.git"
+    "url": "https://github.com/livio/RichErrorModule.git"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha test/index.test.js"
   },
   "version": "0.0.1"
 }
