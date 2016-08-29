@@ -1,17 +1,3 @@
-/*
-/Rich-Error
-	/examples
-		richErrorTest.js
-	/libs
-		index.js
-	license
-	/node_modules
-		i18next
-	package.json
-	readme.md
-	/test
-		test.js
-		*/
 var RichError = require('../libs/index.js')
 var i18next = require('i18next')
 // creates a new Error instance

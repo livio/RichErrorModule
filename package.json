@@ -3,7 +3,7 @@
     "name": "Livio"
   },
   "bugs": {
-    "url": "http://github.com/livio/richErrorModule/issues"
+    "url": "https://github.com/renonick87/Rich-Error/issues"
   },
   "contributors": [
     {
@@ -18,13 +18,19 @@
   "dependencies": {
     "i18next": "^3.4.1"
   },
-  "description": "",
+  "description": "R.E.M.I.E. Rich Error Module Is Everything",
   "devDependencies": {
     "chai": "^3.5.0",
     "codecov.io": "^0.1.6",
-    "istanbul": "^0.3.20",
+    "commitizen": "^2.8.6",
+    "cz-conventional-changelog": "^1.2.0",
+    "ghooks": "^1.3.2",
+    "istanbul": "^0.3.22",
     "mocha": "^2.5.3",
-    "should": "^7.1.0"
+    "semantic-release": "^4.3.5",
+    "semantic-release-cli": "^1.4.1",
+    "should": "^7.1.0",
+    "travis-ci": "^2.1.0"
   },
   "engines": {
     "node": ">=6.0.0"
@@ -32,11 +38,11 @@
   "keywords": [
     "API",
     "ENVELOPE",
+    "ERROR",
     "LIVIO",
     "MICRO",
     "MICROSERVICE",
-    "REPLY",
-    "RESPONSE",
+    "RICH",
     "RICHERRORMODULE",
     "SERVER",
     "SERVICE"
@@ -44,18 +50,29 @@
   "licenses": [
     {
       "type": "BSD-3-Clause",
-      "url": "https://github.com/livio/RichErrorModule/blob/master/license"
+      "url": "https://github.com/renonick87/Rich-Error/blob/master/license"
     }
   ],
   "main": "./libs",
-  "name": "richErrorModule",
+  "name": "remie",
   "private": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/livio/RichErrorModule.git"
+    "url": "https://github.com/renonick87/Rich-Error"
   },
   "scripts": {
-    "test": "mocha test/index.test.js"
+    "commit": "git-cz",
+    "test": "mocha test/index.test.js -w",
+    "test:single": "istanbul cover -x * .test.js _mocha -- -R spec test/index.test.js",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
-  "version": "0.0.1"
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm run test"
+    }
+  },
+  "czConfig": {
+    "path": "node_modules/cz-conventional-changelog"
+  },
+  "version": "0.0.2"
 }

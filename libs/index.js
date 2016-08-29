@@ -2,7 +2,9 @@
  * ******************** Module Variables & Constants
  * ************************************************** */
 
-var i18next = require('i18next')
+var i18next = require('i18next'), 
+  EventEmitter = require('events').EventEmitter,
+  util = require('util');
 const ERROR_LEVEL_FATAL = 'fatal',
   ERROR_LEVEL_ERROR = 'error',
   ERROR_LEVEL_WARN = 'warn',
@@ -13,28 +15,64 @@ const ERROR_LEVEL_FATAL = 'fatal',
 const DEFAULT_ERROR_MESSAGE = "Internal server error!",
   DEFAULT_ERROR_LOCALE = "server.500.generic";
 
+
+
 /* ************************************************** *
  * ******************** RichError Class
  * ************************************************** */
 
-class RichError {
-  constructor(err, options, i18next, locale) {
-    this.build(err, options, locale);
+class REMIE {
+  constructor(err = {}, options = {}, i18next, locale) {
+    console.log('constructor was called')
+    console.log(richError)
+    this.setDefault();
+    //this.build(err, options, locale);
+    //this.set({i18next: i18next})
+    /*richError.on('on-internal-error', function(err){
+      console.log("Internal Error %s", err.internalMessage);
+    });*/
+    let event = 'on-internal-error'
+    //err.code = 'error!'
+    //err.internalMessage = 'internal message2'
+    /*if (err.internalMessage) { //does not run if undefined or null
+      richError.emit(event, err)
+    } else {
+      console.log('didnt emit because internal Message does not exist')
+    }*/
+    EventEmitter.call(this)
   };
+
+  create(err, options, i18next, locale) {
+    console.log('create was called')
+    //let RichError = new richError(err, options, i18next, locale);
+    if (richError.internalMessage) {
+      this.on(RichError.internalMessage); //signals listener in example
+    }
+    return new REMIE(err, options, i18next, locale)
+  }
 
   static buildInternal(err, options) { 
     console.log('static was called') //temporary
     options.internalOnly = true;
-    return new RichError(err, options);
+    return new REMIE(err, options);
   };
 
   copy() {
-    return new RichError(this.toObject());
+    console.log('copy was called')
+    return new REMIE(this.toObject());
   };
+  /*
+  on(err) {
+    console.log('on was called')
+    if (err){
+      console.log(err)
+      //this.emit('on-internal-error')
+    }
+  }
 
-/* ************************************************** *
- * ******************** Private Methods
- * ************************************************** */
+  /* ************************************************** *
+   * ******************** Private Methods
+   * ************************************************** */
 
   guessStatusCodeOfLocale(locale) {
     console.log("guessStatusCodeOfLocale") //temp
@@ -58,8 +96,8 @@ class RichError {
         return 500;
     }
   };
-
-  buildFromSystemError(err = new Error(DEFAULT_ERROR_MESSAGE), options = {}) { // 'Internal server error!'
+  
+  /*buildFromSystemError(err = new Error(DEFAULT_ERROR_MESSAGE), options = {}) { // 'Internal server error!'
     console.log('buildFromSystemError was called') //temp
     let richErrorObject = {};
     richErrorObject.error = err;
@@ -175,7 +213,7 @@ class RichError {
     this.statusCode = richErrorObject.statusCode;
 
     return this;
-  };
+  };*/
 
   toObject() {
     console.log('toObject was called') // temp
@@ -244,5 +282,62 @@ class RichError {
       return undefined;
     }
   }
+
+  handle(event, data, options, cb) {
+    this.emit(event, data, options);
+    if (this.handlers[event]) {
+      this.handlers[event](data, options, cb, this);
+    }
+    return this;
+  }
+  
+  onLog(data, options = {}) {
+    if (this.log && data) {
+      let method = this.log[options.level || "info"];
+      method.apply(this.log, data);
+    }
+  };
+
+  setDefault() {
+    console.log('setDefault was called') //temp
+    this.i18next = i18next;
+    this.log = undefined;
+
+    // adds event listeners
+    this.on(REMIE.ON_LOG, this.onLog);
+    
+    // add default handlers
+    this.handlers = {};
+    this.use(REMIE.HANDLER_TYPE_ERROR, HANDLER_INTERNAL_ERROR)
+  }
+
+  use(type, method) {
+    console.log('use was called') //temp
+    this.handlers[type] = method;
+    return this;
+  }
+
+  static get HANDLER_INTERNAL_ERROR() {return 'internal error'}
 };
-module.exports = RichError
+
+util.inherits(REMIE, EventEmitter)
+
+
+/* ************************************************** *
+ * ******************** Require Other Classes
+ * ************************************************** */
+let RichError = require('./RichError.js'),
+  //richerror = (RichError)(this),
+  richError = new RichError()
+
+//let RichError = (require('./RichError.js'))(this)
+
+module.exports = REMIE
+
+
+const HANDLER_INTERNAL_ERROR = function(err, options, i18next, locale) {
+  console.log('HANDLER_INTERNAL_ERROR was called') //temp
+  if (err.internalMessage) {
+    console.log('Internal Error %s', err)
+  }
+}
