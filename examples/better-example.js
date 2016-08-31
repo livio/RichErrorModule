@@ -1,3 +1,6 @@
+/* ************************************************** *
+ * ******************** REMIE
+ * ************************************************** */
 let REMIE = require('../libs/index.js'),
   remie = new REMIE(),
   i18next = require('i18next'),
@@ -74,9 +77,9 @@ var locale = 'server.400.notFound'
 localeErr = 'server.400.forbidden'
 
 i18next.init({
-	lng: "en-US",
+  lng: "en-US",
   //nsSeparator: false,
-	keySeparator: false,
+  keySeparator: false,
   //load:['en-US', 'fr', 'es'],
   //fallbackLng: 'en-US',
   //backend: {
@@ -85,8 +88,8 @@ i18next.init({
   resources: {
     en: {
       translation: { // did a lot of searching, still unsure how this works
-      	// probably have to load JSON file here
-      	"server":{
+        // probably have to load JSON file here
+        "server":{
           "400":{
             "forbidden": "this is how it's done"
           }
@@ -100,32 +103,5 @@ i18next.init({
 }//, (err, t) => {
   //const hw = i18next.t('key'); // hw = 'hello world'
 //}
-)
-
-//creates a new instance of RichError
-var exampleRichError = new REMIE(err, options, i18next, locale)
-
-
-console.log(exampleRichError)
-
-
-// creates a new RichError instance with a RichError passed in
-console.log(new REMIE(exampleRichError, options, i18next, locale))
-
-
-// creates a new RichError instance with locale error passed in
-// tries to find status code for the error
-console.log(new REMIE(localeErr, options, i18next, locale))
-
-
-console.log(exampleRichError.toResponseObject(localeErr, options, i18next, locale))
-
-// exists must be sent a string
-console.log(i18next.exists('server'))
-console.log(i18next.t(localeErr)) // returns "it might be working"
-console.log(i18next.exists('server.400.forbidden'))
-
-
-//					 ||||
-//error here vvvv if options.i18next is not a string
-console.log(REMIE.buildInternal(err, options, localeErr))*/
+)*/
+module.exports = error2
