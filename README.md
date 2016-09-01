@@ -1,5 +1,5 @@
-# RichError Code Review
-1. Where is the cool name?
+# REMIE Code Review
+1. Where is the cool name? REMIE (Rich Error Module Is Excellent)
 2. Add a .gitignore file to avoid checking in dependancies.
 3. User interface design first, how will the developer use this module.
 
