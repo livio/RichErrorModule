@@ -12,6 +12,7 @@ var inherits = require('util').inherits;
   err.code = 'wooh!'
   err.internalMessage = 'internal message1'
 
+remie.i18next= i18next
 //console.log(remie, '2')
 inherits(REMIE, EventEmitter.EventEmitter)
 

@@ -1,6 +1,9 @@
 let expect = require('chai').expect,
-	remie = require('../examples/better-example.js'),
-	RichError = require('../libs/RichError.js')
+	//remie = require('../examples/better-example.js'),
+	RichError = require('../libs/RichError.js'),
+	REMIE = require('../libs/index.js'),
+	remie = new REMIE();
+remie.create("Something went wrong", {});
 
 describe('Rich-Error', function(){
 	it('REMIE is not null', function(){
