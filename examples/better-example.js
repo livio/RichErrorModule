@@ -2,30 +2,25 @@
  * ******************** REMIE
  * ************************************************** */
 let REMIE = require('../libs/index.js'),
-  remie = new REMIE(),
+  remie = new (require('../libs/index.js'))(),
   i18next = require('i18next'),
-  EventEmitter = require('events').EventEmitter;
+  EventEmitter = require('events');
   //EventListener = require('events').EventListener;
   //console.log(EventListener)
-  var inherits = require('util').inherits;
+var inherits = require('util').inherits;
   err = {}
   err.code = 'wooh!'
   err.internalMessage = 'internal message1'
-//addEventListener here
-// needs to be able to listen for when 'on-internal-error' is true, then it can emit signal to log it
-// or change richError.on to an eventListener and skip a step
-//console.log(richError)
-console.log(remie, '2')
-inherits(REMIE, EventEmitter)
-//console.log(richError)
-//have to fix this eventually vvvv
-//RichError.set({i18next: i18next});
 
-let error = remie.create(err, {})
+//console.log(remie, '2')
+inherits(REMIE, EventEmitter.EventEmitter)
+
+//let error = remie.create(err, {})
 //let error = richError.create("Something went wrong", {});
 let error2 = remie.create("Something else went wrong", {});
 //let error3 = richError.create("Oh crap, what now", {});
-console.log('error2 %s', JSON.stringify(error2))
+console.log(JSON.stringify(error2))
+console.log(error2)
 
 remie.on('on-internal-error', function(err){
   console.log("Internal Error %s", err.internalMessage);
