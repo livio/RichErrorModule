@@ -18,8 +18,11 @@ remie.i18next = i18next
 //console.log(remie, '2')
 inherits(REMIE, EventEmitter.EventEmitter)
 
-let error = remie.create(err, {})
-//let error = remie.create("Something went wrong", {});
+//let error = remie.create(err, {})
+let error = remie.create("Something went wrong", {})
+// |||
+// vvv does not work if richErrorObject.error is undefined, null. must be object with property "message"
+//let error2 = remie.toObject(error)
 //let error2 = remie.create("Something else went wrong", {});
 //let error3 = remie.create("Oh crap, what now", {});
 console.log(error)
