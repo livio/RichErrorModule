@@ -2,7 +2,7 @@ let expect = require('chai').expect,
 	//remie = require('../examples/better-example.js'),
 	RichError = require('../libs/RichError.js'),
 	REMIE = require('../libs/index.js'),
-	remie = new REMIE();
+	remie = new REMIE(),
 exRemie = remie.create("Something went wrong", {});
 
 describe('Rich-Error', function(){
