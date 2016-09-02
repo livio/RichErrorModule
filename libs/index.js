@@ -63,6 +63,7 @@ class REMIE {
     this.setDefault();
     let event = 'on-internal-error'
     EventEmitter.call(this)
+    this.create(err, options, i18next, locale)
   };
 
   create(err, options, i18next, locale) {
