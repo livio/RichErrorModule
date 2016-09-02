@@ -64,5 +64,5 @@
     "test": "mocha test/index.test.js",
     "test:single": "istanbul cover -x * .test.js _mocha -- -R spec test/index.test.js"
   },
-  "version": "0.0.2"
+  "version": "0.0.3"
 }
