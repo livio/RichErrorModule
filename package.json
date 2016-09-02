@@ -61,7 +61,7 @@
     "url": "https://github.com/livio/RichErrorModule"
   },
   "scripts": {
-    "test": "mocha test/index.test.js",
+    "test": "mocha test/index.test.js"
   },
   "version": "0.0.3"
 }
