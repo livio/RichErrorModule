@@ -3,22 +3,16 @@ let expect = require('chai').expect,
 	RichError = require('../libs/RichError.js'),
 	REMIE = require('../libs/index.js'),
 	remie = new REMIE();
-remie.create("Something went wrong", {});
+exRemie = remie.create("Something went wrong", {});
 
 describe('Rich-Error', function(){
-	it('REMIE is not null', function(){
-		expect(remie).to.not.be.a('null');
-	});
-});
-
-describe('Rich-Error', function(){
-	it('REMIE is not undefined', function(){
-		expect(remie).to.not.be.a('undefined');
+	it('remie is not null or undefined', function(){
+		expect(remie).to.exist;
 	});
 });
 
 describe('Rich-Error', function(){
 	it('REMIE is an instance of Rich Error', function(){
-		expect(remie).to.be.an.instanceof(RichError);
+		expect(exRemie).to.be.an.instanceof(RichError);
 	});
 });
