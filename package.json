@@ -3,7 +3,7 @@
     "name": "Livio"
   },
   "bugs": {
-    "url": "https://github.com/renonick87/REMIE/issues"
+    "url": "https://github.com/livio/REMIE/issues"
   },
   "contributors": [
     {
@@ -49,7 +49,7 @@
   "licenses": [
     {
       "type": "BSD-3-Clause",
-      "url": "https://github.com/renonick87/REMIE/blob/master/license"
+      "url": "https://github.com/livio/REMIE/blob/master/license"
     }
   ],
   "main": "./libs",
@@ -57,12 +57,10 @@
   "private": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/renonick87/REMIE"
+    "url": "https://github.com/livio/REMIE"
   },
   "scripts": {
-    "commit": "git-cz",
     "test": "mocha test/index.test.js",
-    "test:single": "istanbul cover -x * .test.js _mocha -- -R spec test/index.test.js"
   },
   "version": "0.0.3"
 }
