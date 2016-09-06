@@ -15,7 +15,7 @@ let i18next = require('i18next'),
     DEFAULT_ERROR_LOCALE = "server.500.generic";
 
 class RichError{
-  constructor(err, options, i18next, locale) {
+  constructor(err, options, locale) {
     console.log('RE constructor was called')
     this.build(err, options, locale)
   };
@@ -45,7 +45,6 @@ class RichError{
         }
       }
     }
-    console.log(this)
     return this;
   };
   buildFromSystemError(err = new Error(DEFAULT_ERROR_MESSAGE), options = {}) { // 'Internal server error!'
@@ -136,7 +135,6 @@ class RichError{
       this.error.code = richErrorObject.error.code;
       this.error.stack = richErrorObject.error.stack;
     }
-    console.log(this.error)
 
     // When true, the error should not be shown to an external client.
     this.internalOnly = richErrorObject.internalOnly;
