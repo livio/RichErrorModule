@@ -8,7 +8,7 @@ let REMIE = require('../libs/index.js'),
   //EventListener = require('events').EventListener;
   //console.log(EventListener)
 var inherits = require('util').inherits;
-err = {}
+err = 'server.400.notFound'
 err.code = 'server.400.notFound'
 err.message = 'Message in an error!'
 //err.stack = 'errors stacked on errors'
@@ -25,7 +25,9 @@ remie.i18next = i18next
 
 inherits(REMIE, EventEmitter.EventEmitter)
 
-let error = remie.create('Something went wrong', options, locale)
+//let error = remie.create(err, options, locale)
+let error = remie.create(err)
+//let error = remie.create('Something went wrong', options, locale)
 //let error = remie.create("Something went wrong", {})
 // |||
 // vvv does not work if richErrorObject.error is undefined, null. must be object with property "message"
@@ -34,7 +36,7 @@ let error = remie.create('Something went wrong', options, locale)
 //let error3 = remie.create("Oh crap, what now", {});
 console.log(error)
 
-
+module.exports = error
 
 /*
 remie.on('on-internal-error', function(err){
