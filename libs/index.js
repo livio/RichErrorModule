@@ -58,20 +58,20 @@ console.log(test)*/
  * ************************************************** */
 
 class REMIE {
-  constructor(err = {}, options = {}, i18next, locale) {
+  constructor(err = {}, options = {}, locale) {
     console.log('constructor was called')
     this.setDefault();
     let event = 'on-internal-error'
     EventEmitter.call(this)
-    this.create(err, options, i18next, locale)
+    this.create(err, options, locale)
   };
 
-  create(err, options, i18next, locale) {
+  create(err, options, locale) {
     console.log('create was called')
     if (richError.internalMessage) {
       this.on(RichError.internalMessage); //signals listener in example
     }
-    return new RichError(err, options, i18next, locale)
+    return new RichError(err, options, locale)
   }
 
   static buildInternal(err, options) { 
@@ -232,7 +232,7 @@ let RichError = require('./RichError.js'),
 
 module.exports = REMIE
 
-const HANDLER_INTERNAL_ERROR = function(err, options, i18next, locale) {
+const HANDLER_INTERNAL_ERROR = function(err, options, locale) {
   console.log('HANDLER_INTERNAL_ERROR was called') //temp
   if (err.internalMessage) {
     console.log('Internal Error %s', err)
