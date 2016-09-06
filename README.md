@@ -20,7 +20,7 @@ Then run an example:
 $ node examples/better-example
 ```
 
-##Parameters
+## Parameters
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | options | Object | ```{}``` | Overrides default behaviors |
