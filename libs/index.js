@@ -15,43 +15,6 @@ const ERROR_LEVEL_FATAL = 'fatal',
 const DEFAULT_ERROR_MESSAGE = "Internal server error!",
   DEFAULT_ERROR_LOCALE = "server.500.generic";
 
-//let options = {}
-
-
-/*
-i18next.init({
-  lng: "en",
-  nsSeparator: false,
-  keySeparator: true,
-  //load:['en-US', 'fr', 'es'],
-  //fallbackLng: 'en-US',
-  //backend: {
-  //  loadPath: '/language/static/{{lng}}/{{ns}}.json'
-  //},
-  resources: {
-    en: {
-      translation: { // did a lot of searching, still unsure how this works
-        "server": {
-          "400": {
-            "forbidden": "this is how it's done"
-          }
-        },
-        "server.403.forbidden" : "it might be working",
-        // keySeparator must be set to false else 'server.400' is not recognized with '.'
-        "server" : "this one works"
-      }
-    }
-  }
-}, (err, t) => {
-  const hw = i18next.t(err); // hw = 'hello world'
-}
-)
-
-let test = i18next.t('server.400.forbidden')
-console.log(test)*/
-
-
-
 
 /* ************************************************** *
  * ******************** RichError Class
@@ -80,9 +43,10 @@ class REMIE {
     return new REMIE(err, options);
   };
 
-  copy() {
+  copy(remie) {
     console.log('copy was called')
-    return new REMIE(this.toObject());
+    let self = remie
+    return new REMIE(self.toObject());
   };
 
   /* ************************************************** *
@@ -91,21 +55,23 @@ class REMIE {
 
 
 
-  toObject() {
+  toObject(remie) {
     console.log('toObject was called') // temp
+    let self = this
+    console.log(self)
     return {
       error: {
-        code: this.error.code,
-        message: this.error.message,
-        stack: this.error.stack
+        code: self.error.code,
+        message: self.error.message,
+        stack: self.error.stack
       },
-      internalOnly: this.internalOnly,
-      internalMessage: this.internalMessage,
-      level: this.level,
-      messageData: this.messageData,
-      options: this.options,
-      referenceData: this.referenceData,
-      statusCode: this.statusCode
+      internalOnly: self.internalOnly,
+      internalMessage: self.internalMessage,
+      level: self.level,
+      messageData: self.messageData,
+      options: self.options,
+      referenceData: self.referenceData,
+      statusCode: self.statusCode
     };
   };
 

@@ -4,18 +4,51 @@ console.log('module was called')
 let i18next = require('i18next'),
   _ = require('lodash');
 
-  const ERROR_LEVEL_FATAL = 'fatal',
-    ERROR_LEVEL_ERROR = 'error',
-    ERROR_LEVEL_WARN = 'warn',
-    ERROR_LEVEL_INFO = 'info',
-    ERROR_LEVEL_DEBUG = 'debug',
-    ERROR_LEVEL_TRACE = 'trace';
+const ERROR_LEVEL_FATAL = 'fatal',
+  ERROR_LEVEL_ERROR = 'error',
+  ERROR_LEVEL_WARN = 'warn',
+  ERROR_LEVEL_INFO = 'info',
+  ERROR_LEVEL_DEBUG = 'debug',
+  ERROR_LEVEL_TRACE = 'trace';
   
-  const DEFAULT_ERROR_MESSAGE = "Internal server error!",
-    DEFAULT_ERROR_LOCALE = "server.500.generic";
+const DEFAULT_ERROR_MESSAGE = "Internal server error!",
+  DEFAULT_ERROR_LOCALE = "server.500.generic";
+
+i18next.init({
+  lng: "en-US",
+  nsSeparator: false,
+  //keySeparator: false,
+  //load:['en-US', 'fr', 'es'],
+  //fallbackLng: 'en-US',
+  //backend: {
+  //  loadPath: '/language/static/{{lng}}/{{ns}}.json'
+  //},
+  resources: {
+    en: {
+      translation: { // did a lot of searching, still unsure how this works
+        // probably have to load JSON file here
+        "server" : {
+          "400" : {
+            "notFound" : "this is how it's done",
+            "forbidden" : "this one works too"
+          }
+        }
+        // keySeparator must be set to false else 'server.400' is not recognized with '.'
+      }
+    }
+  }
+}//, (err, t) => {
+  //const hw = i18next.t('key'); // hw = 'hello world'
+//}
+)
+
+console.log(i18next.t('server.400.forbidden'))
+console.log(i18next.t('server.400.notFound'))
 
 class RichError{
   constructor(err, options, locale) {
+    //initialize logger
+    // move constants here
     console.log('RE constructor was called')
     this.build(err, options, locale)
   };
@@ -26,6 +59,7 @@ class RichError{
     if(err === undefined) {
       if (options.internalMessage !== undefined) {
         console.log(options.internalMessage)
+        return 3 // TODO find out what happens as a result of returning 3
       };
       return undefined
     } else {
