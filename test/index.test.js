@@ -12,7 +12,7 @@ let err = {}
 err.code = 'server.400.notFound'
 err.message = 'message in an error'
 err.stack = 'stack would go here'
-let objct = remie.toObject(exRemie)
+let objct = exRemie.toObject(exRemie)
 //let copy = remie.copy(remie) // need to create error: code, message, stack, etc. properties
 //console.log(copy)
 	
