@@ -42,11 +42,12 @@ i18next.init({
 //}
 )
 
-console.log(i18next.t('server.400.forbidden'))
-console.log(i18next.t('server.400.notFound'))
+//console.log(i18next.t('server.400.forbidden'))
+//console.log(i18next.t('server.400.notFound'))
 
 class RichError{
   constructor(err, options, locale) {
+    let i18next = require('i18next')
     //initialize logger
     // move constants here
     console.log('RE constructor was called')
@@ -64,7 +65,7 @@ class RichError{
       return undefined
     } else {
       if (err instanceof RichError) {
-        self.set(err.toObject());
+        self.set(err.toObject(err));
       } else {
         if (err instanceof Error) {
           self.set(this.buildFromSystemError(err, options));
@@ -147,6 +148,8 @@ class RichError{
         return 404;
       case "server.400.unauthorized":
         return 401;
+      case undefined:
+        return 500; //find out what happens as a result of this
       default:
         let categories = locale.split(".");
         if (categories.length != 0) {
@@ -193,11 +196,28 @@ class RichError{
 
     return this;
   };
-}
+
+  toObject(remie) {
+    console.log('toObject was called') // temp
+    let self = remie
+    return { //possibly need to restructure to work when one or more values is not given
+      error: {
+        code: self.error.code,
+        message: self.error.message,
+        stack: self.error.stack
+      },
+      internalOnly: self.internalOnly,
+      internalMessage: self.internalMessage,
+      level: self.level,
+      messageData: self.messageData,
+      options: self.options,
+      referenceData: self.referenceData,
+      statusCode: self.statusCode
+    };
+  };
+};
 //  return RichError
 //};
 module.exports = RichError
-
-
 
 var inherits = require('util').inherits;  
