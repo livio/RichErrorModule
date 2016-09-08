@@ -26,7 +26,8 @@ class REMIE {
     //this.setDefault();
     //let event = 'on-internal-error'
     //EventEmitter.call(this)
-    this.create(err, options, locale)
+    //this.create(err, options, locale)
+    //return this.create(err, options, locale)
     return this
   };
 
@@ -55,9 +56,6 @@ class REMIE {
    * ************************************************** */
 
 
-
-  
-
   log(logger) {
     console.log('log was called') //temp
     if(this.internalMessage) {
@@ -70,43 +68,6 @@ class REMIE {
       }
     }
   };
-
-  toResponseObject(options = {}) {
-    console.log('toResponseObject was called') //temp
-    let self = this,
-      obj = {}; 
-    if(self.internalOnly !== true && options.internalOnly !== false) {
-      if (self.error && options.error !== false) {
-        let error = {},
-          errorOptions = options.error || {};
-        if (self.error.message && errorOptions.message !== false) {
-          error.message = self.error.message;
-        }
-        if (self.error.code && errorOptions.code !== false) {
-          error.code = self.error.code;
-        }
-        if (self.error.stack && errorOptions.stack !== false) {
-          error.stack = self.error.stack;
-        }
-        obj.error = error;
-      }
-      if(self.referenceData && options.referenceData !== false) {
-        obj.referenceData = self.referenceData;
-      }
-      if(self.level && options.level !== false) {
-        obj.level = self.level;
-      }
-      if(self.messageData && options.messageData !== false) {
-        obj.messageData = self.messageData;
-      }
-      if(self.statusCode && options.statusCode !== false) {
-        obj.statusCode = self.statusCode;
-      }
-      return obj;
-    } else {
-      return undefined;
-    }
-  }
 
   handle(event, data, options, cb) {
     console.log('handle was called')
