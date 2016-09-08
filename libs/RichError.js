@@ -7,52 +7,50 @@ const ERROR_LEVEL_FATAL = 'fatal',
   ERROR_LEVEL_WARN = 'warn',
   ERROR_LEVEL_INFO = 'info',
   ERROR_LEVEL_DEBUG = 'debug',
-  ERROR_LEVEL_TRACE = 'trace';
-  
-const DEFAULT_ERROR_MESSAGE = "Internal server error!",
+  ERROR_LEVEL_TRACE = 'trace',
+  DEFAULT_ERROR_MESSAGE = "Internal server error!",
   DEFAULT_ERROR_LOCALE = "server.500.generic";
 
-i18next.init({
-  lng: "en-US",
-  nsSeparator: false,
+
+
+//console.log(i18next.t('server.400.forbidden'))
+//console.log(i18next.t('server.400.notFound'))
+
+class RichError{
+  constructor(err, options) {
+    let i18next = require('i18next')
+    i18next.init({
+      lng: "en-US",
+      nsSeparator: false,
   //keySeparator: false,
   //load:['en-US', 'fr', 'es'],
   //fallbackLng: 'en-US',
   //backend: {
   //  loadPath: '/language/static/{{lng}}/{{ns}}.json'
   //},
-  resources: {
-    en: {
-      translation: { // did a lot of searching, still unsure how this works
+      resources: {
+        en: {
+          translation: { // did a lot of searching, still unsure how this works
         // probably have to load JSON file here
-        "server" : {
-          "400" : {
-            "notFound" : "The page could not be found",
-            "forbidden" : "The page is forbidden"
+          "server" : {
+            "400" : {
+              "notFound": "The page could not be found",
+              "forbidden": "The page is forbidden",
+              "unauthorized": "You are not authorized to access this page"
+              }
+            }
+          // keySeparator must be set to false else 'server.400' is not recognized with '.'
           }
         }
-        // keySeparator must be set to false else 'server.400' is not recognized with '.'
       }
-    }
-  }
-}//, (err, t) => {
-  //const hw = i18next.t('key'); // hw = 'hello world'
-//}
-)
-
-//console.log(i18next.t('server.400.forbidden'))
-//console.log(i18next.t('server.400.notFound'))
-
-class RichError{
-  constructor(err, options, locale) {
-    let i18next = require('i18next')
+    });
     //initialize logger
     // move constants here
     //console.log('RE constructor was called')
-    this.build(err, options, locale)
+    this.build(err, options)
   };
 
-  build(err, options = {}, locale) {
+  build(err, options = {}) {
     //console.log('build was called') //temp
     let self = this;
     if(err === undefined) {
@@ -69,7 +67,7 @@ class RichError{
           self.set(this.buildFromSystemError(err, options));
         } else if(typeof err === 'string' || err instanceof String) {
           if (i18next && i18next.exists(err)) { 
-            self.set(this.buildFromLocale(locale, options));// sent err before but buildFromLocale had locale as parameter
+            self.set(this.buildFromLocale(err, options));// err is a locale
           } else {
             self.set(this.buildFromString(err, options));
           }
@@ -98,7 +96,7 @@ class RichError{
   buildFromLocale(locale = DEFAULT_ERROR_LOCALE, options = {}) { // 'server.500.generic'
     //console.log('buildFromLocale was called') //temp
     let richErrorObject = {};
-    richErrorObject.error = new Error(i18next.t(locale, options.i18next));
+    richErrorObject.error = new Error(i18next.t(locale, options.i18next)); // options.i18next can not be i18next because of this line. It would mean calling translate on itself
     richErrorObject.error.code = locale.toLowerCase();
     richErrorObject.internalOnly = (options.internalOnly === true) ? true : false;
     richErrorObject.internalMessage = options.internalMessage || undefined;
@@ -130,6 +128,7 @@ class RichError{
     switch (key) {
       case "code":
       case "stack":
+      case "message":
         return (this.error) ? this.error[key] : undefined;
       default:
         return this[key];
@@ -214,6 +213,7 @@ class RichError{
       statusCode: self.statusCode
     };
   };
+
   toResponseObject(options = {}) {
     //console.log('toResponseObject was called') //temp
     let self = this,
