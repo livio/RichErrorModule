@@ -19,6 +19,7 @@ let remie = new (require('remie'))(),
 | options.internalOnly | Boolean | ```false``` | Specifies an error for the developer only | ```no``` |
 | options.internalMessage | String | ```undefined``` | String message for developer | ```no``` |
 | options.level | String | ```error``` | String error level (e.g. warning, info, error, trace) | ```no``` |
+| options.messageData | ??? | ```undefined``` | Extra data included in the message | ```no``` |
 | options.referenceData | ??? | ```undefined``` | Data that may have caused the error | ```no``` |
 | options.statusCode | Number | ```500``` | HTTP status code (e.g. 200, 400, 500) | ```no``` |
 
