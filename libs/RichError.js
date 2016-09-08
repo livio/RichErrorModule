@@ -1,6 +1,4 @@
 let EventEmitter = require('events');
-//module.exports = function() {
-console.log('module was called')
 let i18next = require('i18next'),
   _ = require('lodash');
 
@@ -29,8 +27,8 @@ i18next.init({
         // probably have to load JSON file here
         "server" : {
           "400" : {
-            "notFound" : "this is how it's done",
-            "forbidden" : "this one works too"
+            "notFound" : "The page could not be found",
+            "forbidden" : "The page is forbidden"
           }
         }
         // keySeparator must be set to false else 'server.400' is not recognized with '.'
@@ -50,12 +48,12 @@ class RichError{
     let i18next = require('i18next')
     //initialize logger
     // move constants here
-    console.log('RE constructor was called')
+    //console.log('RE constructor was called')
     this.build(err, options, locale)
   };
 
   build(err, options = {}, locale) {
-    console.log('build was called') //temp
+    //console.log('build was called') //temp
     let self = this;
     if(err === undefined) {
       if (options.internalMessage !== undefined) {
@@ -83,7 +81,7 @@ class RichError{
     return this;
   };
   buildFromSystemError(err = new Error(DEFAULT_ERROR_MESSAGE), options = {}) { // 'Internal server error!'
-    console.log('buildFromSystemError was called') //temp
+    //console.log('buildFromSystemError was called') //temp
     let richErrorObject = {};
     richErrorObject.error = err;
     richErrorObject.error.code = (err.code) ? err.code.toLowerCase() : undefined;
@@ -98,7 +96,7 @@ class RichError{
   };
 
   buildFromLocale(locale = DEFAULT_ERROR_LOCALE, options = {}) { // 'server.500.generic'
-    console.log('buildFromLocale was called') //temp
+    //console.log('buildFromLocale was called') //temp
     let richErrorObject = {};
     richErrorObject.error = new Error(i18next.t(locale, options.i18next));
     richErrorObject.error.code = locale.toLowerCase();
@@ -113,7 +111,7 @@ class RichError{
   };
 
   buildFromString(errorString = DEFAULT_ERROR_MESSAGE, options = {}) { // 'Internal server error!'
-    console.log('buildFromString was called') //temp
+    //console.log('buildFromString was called') //temp
     let richErrorObject = {};
     richErrorObject.error = new Error(errorString);
     richErrorObject.error.code = (options.code) ? options.code.toLowerCase() : undefined;
@@ -128,7 +126,7 @@ class RichError{
   };
 
   get(key) {
-    console.log('get was called')
+    //console.log('get was called')
     switch (key) {
       case "code":
       case "stack":
@@ -139,7 +137,7 @@ class RichError{
   };
 
   guessStatusCodeOfLocale(locale) {
-    console.log("guessStatusCodeOfLocale") //temp
+    //console.log("guessStatusCodeOfLocale") //temp
     switch (locale) {
     //case "server.400.badRequest":
       //  return 400;
@@ -164,10 +162,9 @@ class RichError{
   };
 
   set(richErrorObject) { 
-    console.log('set was called') //temp
+    //console.log('set was called') //temp
     // Node.js error object.  Contains two important child attributes "code" and "stack".
     if(richErrorObject.error instanceof Error) {
-      console.log('its an error')
       this.error = richErrorObject.error;
     } else if(richErrorObject.error !== null && typeof richErrorObject.error === 'object') {
       this.error = new Error(richErrorObject.error.message);
@@ -199,9 +196,9 @@ class RichError{
     return this;
   };
 
-  toObject(remie) {
-    console.log('toObject was called') // temp
-    let self = remie
+  toObject() {
+    //console.log('toObject was called') // temp
+    let self = this
     return { //possibly need to restructure to work when one or more values is not given
       error: {
         code: self.error.code,
@@ -218,7 +215,7 @@ class RichError{
     };
   };
   toResponseObject(options = {}) {
-    console.log('toResponseObject was called') //temp
+    //console.log('toResponseObject was called') //temp
     let self = this,
       obj = {}; 
     if(self.internalOnly !== true && options.internalOnly !== false) { 
@@ -254,8 +251,6 @@ class RichError{
     }
   }
 };
-//  return RichError
-//};
 module.exports = RichError
 
 var inherits = require('util').inherits;  
