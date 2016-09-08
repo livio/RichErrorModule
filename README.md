@@ -4,8 +4,7 @@ standardizes errors across micro-services
 ```js
 let remie = new (require('remie'))(),
 	exRich = remie.create(err, options, locale), // creates a new instance of Rich Error
-	copy = remie.copy(exRich), // makes a copy of the Rich Error, or you could use:
-	copy2 = remie.create().set(exRich)
+	copy = remie.copy(exRich), // makes a copy of the Rich Error
 ```
 
 ## Parameters
@@ -22,6 +21,22 @@ let remie = new (require('remie'))(),
 | options.messageData | ??? | ```undefined``` | Extra data included in the message | ```no``` |
 | options.referenceData | ??? | ```undefined``` | Data that may have caused the error | ```no``` |
 | options.statusCode | Number | ```500``` | HTTP status code (e.g. 200, 400, 500) | ```no``` |
+
+## Rich Error Methods
+call these methods by using exRich.method()
+| Method | Parameters | Description |
+|--------|------------|-------------|
+| build | ```err, options``` | Determines what err is, then calls the correct method |
+| buildFromSystemError | ```err, options``` | err is an Error instance. Sets richErrorObject properties to those of err and options, or to the default |
+| buildFromLocale | ```locale, options``` | err is a locale. Sets richErrorObject properties to those of err and options, or to the default |
+| buildFromString | ```errorString, options``` | err is a string. Sets richErrorObject properties to those of err and options, or to the default |
+| get | ```key``` | Returns corresponding element in the error property(error code, stack, message) |
+| guessStatusCodeOfLocale | ```locale``` | Guesses the status code based on the locale. |
+| set | ```richErrorObject``` |
+| toObject | none |
+| toResponseObject | ```options``` |
+
+## REMIE Methods
 
 ## Installation
 ```bash
