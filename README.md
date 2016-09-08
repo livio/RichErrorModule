@@ -2,11 +2,30 @@
 standardizes errors across micro-services
 
 ```js
-var remie = require('remie')
+let remie = new (require('remie'))(),
+	exRich = remie.create(err, options, locale), // creates a new instance of Rich Error
+	copy = remie.copy(exRich), // makes a copy of the Rich Error, or you could use:
+	copy2 = remie.create().set(exRich)
 ```
 
-## Installation (currently waiting for npm support to transfer ownership)
-```$ npm install remie```
+## Parameters
+| Parameter | Type | Default | Description | Required |
+|-----------|------|---------|-------------|----------|
+| options | Object | ```{}``` | Overrides default behaviors | ```no``` |
+| err | Object | ??? | Node.js error that ocurred | ```yes``` |
+| locale | String | ```server.500.generic``` | Similar to err.code??? | ```no``` |
+| err.code | String | default depends on other parameters? | Unique string "server.400.error" | ```no``` |
+| err.stack | String | ??? | String stack trace |
+| options.internalOnly | Boolean | ```false``` | Specifies an error for the developer only | ```no``` |
+| options.internalMessage | String | ```undefined``` | String message for developer | ```no``` |
+| options.level | String | ```error``` | String error level (e.g. warning, info, error, trace) | ```no``` |
+| options.referenceData | ??? | ```undefined``` | Data that may have caused the error | ```no``` |
+| options.statusCode | Number | ```500``` | HTTP status code (e.g. 200, 400, 500) | ```no``` |
+
+## Installation
+```bash
+$ npm install remie
+```
 
 ## Examples
 First, clone the REMIE repo and install any dependencies:
@@ -20,19 +39,12 @@ Then run an example:
 $ node examples/better-example
 ```
 
-## Parameters
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| options | Object | ```{}``` | Overrides default behaviors |
-| err | Object | ??? | Node.js error that ocurred |
-| locale | String | ```server.500.generic``` | Similar to err.code??? |
-| err.code | String | default depends on other parameters? | Uniquie string "server.400.error" |
-| err.stack | String | ??? | String stack trace |
-| options.internalOnly | Boolean | ```false``` | Specifies an error for the developer only |
-| options.internalMessage | String | ```undefined``` | String message for developer |
-| options.level | String | ```error``` | String error level (e.g. warning, info, error, trace) |
-| options.referenceData | ??? | ```undefined``` | Data that may have caused the error |
-| options.statusCode | Number | ```500``` | HTTP status code (e.g. 200, 400, 500) |
+## Tests
+To run the tests, start by installing dependencies, then run ```npm test```:
+```bash
+$ npm install
+$ npm test
+```
 
 ## License
 [Ford](license)
