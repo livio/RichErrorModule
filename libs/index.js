@@ -22,7 +22,7 @@ const DEFAULT_ERROR_MESSAGE = "Internal server error!",
 
 class REMIE {
   constructor(err = {}, options = {}, locale) {
-    console.log('constructor was called')
+    //console.log('constructor was called')
     //this.setDefault();
     //let event = 'on-internal-error'
     //EventEmitter.call(this)
@@ -32,7 +32,7 @@ class REMIE {
   };
 
   create(err, options, locale) {
-    console.log('create was called')
+    //console.log('create was called')
     if (RichError.internalMessage) {
       this.on(RichError.internalMessage); //signals listener in example
     }
@@ -40,15 +40,15 @@ class REMIE {
   }
 
   static buildInternal(err, options) { 
-    console.log('static was called') //temporary
+    //console.log('static was called') //temporary
     options.internalOnly = true;
     return new RichError(err, options);
   };
 
-  copy(remie) {
-    console.log('copy was called')
-    let self = remie //create new remie instance and call toObject on it
-    return new RichError(remie.toObject(self)); //change to RichError when errors are fixed
+  copy(rich) {
+    //console.log('copy was called')
+    //let self = remie //create new remie instance and call toObject on it
+    return new RichError(rich.toObject()); //change to RichError when errors are fixed
   };
 
   /* ************************************************** *
@@ -57,7 +57,7 @@ class REMIE {
 
 
   log(logger) {
-    console.log('log was called') //temp
+    //console.log('log was called') //temp
     if(this.internalMessage) {
       logger[this.level](this.internalMessage);
     }
@@ -70,7 +70,7 @@ class REMIE {
   };
 
   handle(event, data, options, cb) {
-    console.log('handle was called')
+    //console.log('handle was called')
     this.emit(event, data, options);
     if (this.handlers[event]) {
       this.handlers[event](data, options, cb, this);
@@ -79,7 +79,7 @@ class REMIE {
   }
   
   onLog(data, options = {}) {
-    console.log('onLog was called')
+    //console.log('onLog was called')
     if (this.log && data) {
       let method = this.log[options.level || "info"];
       method.apply(this.log, data);
@@ -87,7 +87,7 @@ class REMIE {
   };
 
   setDefault() {
-    console.log('setDefault was called') //temp
+    //console.log('setDefault was called') //temp
     this.i18next = i18next;
     this.log = undefined;
 
@@ -105,12 +105,12 @@ class REMIE {
   }
 
   onSanitizeData(data, options = {}, cb, riposte) {
-    console.log('onSanitizeData was called')
+    //console.log('onSanitizeData was called')
     cb(undefined, data);
   }
 
   onTranslate(data, options = {}, cb, riposte) {
-    console.log('onTranslate was called')
+    //console.log('onTranslate was called')
     let self = this || self;
 
     let i18next = self.get("i18next");
@@ -122,7 +122,7 @@ class REMIE {
   }
 
   use(type, method) {
-    console.log('use was called') //temp
+    //console.log('use was called') //temp
     this.handlers[type] = method;
     return this;
   }
@@ -146,7 +146,7 @@ let RichError = require('./RichError.js')
 module.exports = REMIE
 
 const HANDLER_INTERNAL_ERROR = function(err, options, locale) {
-  console.log('HANDLER_INTERNAL_ERROR was called') //temp
+  //console.log('HANDLER_INTERNAL_ERROR was called') //temp
   if (err.internalMessage) {
     console.log('Internal Error %s', err)
   }
