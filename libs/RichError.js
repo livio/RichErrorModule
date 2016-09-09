@@ -11,27 +11,15 @@ const ERROR_LEVEL_FATAL = 'fatal',
   DEFAULT_ERROR_MESSAGE = "Internal server error!",
   DEFAULT_ERROR_LOCALE = "server.500.generic";
 
-
-
-//console.log(i18next.t('server.400.forbidden'))
-//console.log(i18next.t('server.400.notFound'))
-
 class RichError{
   constructor(err, options) {
     let i18next = require('i18next')
     i18next.init({
       lng: "en-US",
       nsSeparator: false,
-  //keySeparator: false,
-  //load:['en-US', 'fr', 'es'],
-  //fallbackLng: 'en-US',
-  //backend: {
-  //  loadPath: '/language/static/{{lng}}/{{ns}}.json'
-  //},
       resources: {
         en: {
-          translation: { // did a lot of searching, still unsure how this works
-        // probably have to load JSON file here
+          translation: {
           "server" : {
             "400" : {
               "notFound": "The page could not be found",
@@ -39,13 +27,11 @@ class RichError{
               "unauthorized": "You are not authorized to access this page"
               }
             }
-          // keySeparator must be set to false else 'server.400' is not recognized with '.'
           }
         }
       }
     });
-    //initialize logger
-    // move constants here
+    // move constants here?
     //console.log('RE constructor was called')
     this.build(err, options)
   };
