@@ -24,19 +24,23 @@ let remie = new (require('remie'))(),
 
 ## Rich Error Methods
 ###call these methods by using exRich.method()
-| Method | Parameters | Description | Example |
-|--------|------------|-------------|---------|
-| build | ```err, options``` | Determines what err is, then calls the correct method | exRich.build(err, options) |
-| buildFromSystemError | ```err, options``` | err is an Error instance. Sets richErrorObject properties to those of err and options, or to the default | exRich.buildFromSystemError(new Error(), options) |
-| buildFromLocale | ```locale, options``` | err is a locale. Sets richErrorObject properties to those of err and options, or to the default | exRich.buildFromLocale('server.400.notFound', options) |
-| buildFromString | ```errorString, options``` | err is a string. Sets richErrorObject properties to those of err and options, or to the default | exRich.buildFromString('Something did not work', options) |
-| get | ```key``` | Returns corresponding element in the error property(error code, stack, message) | exRich.get('code') |
-| guessStatusCodeOfLocale | ```locale``` | Guesses the status code based on the locale. | exRich.guessStatusCodeOfLocale('server.400.forbidden') |
-| set | ```richErrorObject``` | Call this on a RichError and send it a RichError or an object with similar properties to set the first's required properties to those of the second | otherRich.set(exRich) |
-| toObject | none | Returns an object with properties of the RichError | exRich.toObject() |
-| toResponseObject | ```options``` | Uses options to return an object with the same properties | exRich.toResponseObject() |
-
+| Method | Parameters | Description |
+|--------|------------|-------------|
+| build | ```err, options``` | Determines what err is, then calls the correct method |
+| buildFromSystemError | ```err, options``` | err is an Error instance. Sets richErrorObject properties to those of err and options, or to the default |
+| buildFromLocale | ```locale, options``` | err is a locale. Sets richErrorObject properties to those of err and options, or to the default |
+| buildFromString | ```errorString, options``` | err is a string. Sets richErrorObject properties to those of err and options, or to the default |
+| get | ```key``` | Is sent a string and returns corresponding element in the error property(error code, stack, message) |
+| guessStatusCodeOfLocale | ```locale``` | Guesses the status code based on the locale. |
+| set | ```richErrorObject``` | Call this on a RichError and send it a different RichError or an object with similar properties to set the first's required properties to those of the second |
+| toObject | none | Returns an object with properties of the RichError |
+| toResponseObject | ```options``` | Uses options to return an object with the same properties |
 ## REMIE Methods
+### call these methods by using remie.method()
+| Method | Parameters | Description |
+|--------|------------|-------------|
+| create | ```err, options``` | Builds a new RichError instance |
+| copy | ```rich``` | Makes a copy of a RichError that has the same necessary properties |
 
 ## Installation
 ```bash
@@ -52,7 +56,7 @@ $ npm install
 ```
 Then run an example:
 ```bash
-$ node examples/better-example
+$ node examples/better-example.js
 ```
 
 ## Tests
