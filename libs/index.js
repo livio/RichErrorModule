@@ -4,6 +4,7 @@
 
 var i18next = require('i18next'), 
   EventEmitter = require('events').EventEmitter,
+//  addEventListener = require('events').addEventListener,
   util = require('util');
 const ERROR_LEVEL_FATAL = 'fatal',
   ERROR_LEVEL_ERROR = 'error',
@@ -21,22 +22,20 @@ const DEFAULT_ERROR_MESSAGE = "Internal server error!",
  * ************************************************** */
 
 class REMIE {
-  constructor(err = {}, options = {}, locale) {
-    //console.log('constructor was called')
-    //this.setDefault();
-    //let event = 'on-internal-error'
-    //EventEmitter.call(this)
-    //this.create(err, options, locale)
-    //return this.create(err, options, locale)
+  constructor(err, options = {}) {
+    let self = this
+    process.on('uncaughtException', function(err){
+      console.log('REMIE detected an error!')
+      var richieRich = self.create(err)
+      console.log(richieRich)
+      return richieRich
+    })
     return this
   };
 
-  create(err, options, locale) {
+  create(err, options = {}) {
     //console.log('create was called')
-    if (RichError.internalMessage) {
-      this.on(RichError.internalMessage); //signals listener in example
-    }
-    return new RichError(err, options, locale)
+    return new RichError(err, options)
   }
 
   static buildInternal(err, options) { 
@@ -47,13 +46,16 @@ class REMIE {
 
   copy(rich) {
     //console.log('copy was called')
-    //let self = remie //create new remie instance and call toObject on it
     return new RichError(rich.toObject()); //change to RichError when errors are fixed
   };
 
   /* ************************************************** *
    * ******************** Private Methods
    * ************************************************** */
+
+   onErrorHandler(target){
+
+   }
 
 
   log(logger) {
@@ -142,7 +144,6 @@ util.inherits(REMIE, EventEmitter)
  * ******************** Require Other Classes
  * ************************************************** */
 let RichError = require('./RichError.js')
-  //richError = new RichError()
 module.exports = REMIE
 
 const HANDLER_INTERNAL_ERROR = function(err, options, locale) {
