@@ -41,9 +41,12 @@ describe('Rich-Error', function(){
 		let objct = exRich.toObject()
 		expect(objct).to.be.an('object')
 		expect(objct).to.not.be.an.instanceof(RichError)
-		expect(objct.error).to.have.property('code').and.to.equal('server.400.forbidden')
-		expect(objct.error).to.have.property('message').and.to.equal('Something went wrong')
-		expect(objct.error).to.have.property('stack')//.and.to.equal('Error: Something went wrong\n    at RichError.buildFromString (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:116:29)\n    at RichError.build (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:74:27)\n    at new RichError (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:52:10)\n    at REMIE.create (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/index.js:39:12)\n    at Object.<anonymous> (/Users/NicholasLivio/Documents/R2/REMIE-livio/test/index.test.js:10:17)\n    at Module._compile (module.js:541:32)\n    at Object.Module._extensions..js (module.js:550:10)\n    at Module.load (module.js:458:32)\n    at tryModuleLoad (module.js:417:12)\n    at Function.Module._load (module.js:409:3)\n    at Module.require (module.js:468:17)\n    at require (internal/module.js:20:19)\n    at /Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:220:27\n    at Array.forEach (native)\n    at Mocha.loadFiles (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:217:14)\n    at Mocha.run (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:485:10)\n    at Object.<anonymous> (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/bin/_mocha:403:18)\n    at Module._compile (module.js:541:32)\n    at Object.Module._extensions..js (module.js:550:10)\n    at Module.load (module.js:458:32)\n    at tryModuleLoad (module.js:417:12)\n    at Function.Module._load (module.js:409:3)\n    at Module.runMain (module.js:575:10)\n    at run (bootstrap_node.js:352:7)\n    at startup (bootstrap_node.js:144:9)\n    at bootstrap_node.js:467:3')
+		expect(objct.error).to.have.property('code')
+		.and.to.equal('server.400.forbidden')
+		expect(objct.error).to.have.property('message')
+		.and.to.equal('Something went wrong')
+		expect(objct.error).to.have.property('stack')
+		//.and.to.equal('Error: Something went wrong\n    at RichError.buildFromString (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:116:29)\n    at RichError.build (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:74:27)\n    at new RichError (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:52:10)\n    at REMIE.create (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/index.js:39:12)\n    at Object.<anonymous> (/Users/NicholasLivio/Documents/R2/REMIE-livio/test/index.test.js:10:17)\n    at Module._compile (module.js:541:32)\n    at Object.Module._extensions..js (module.js:550:10)\n    at Module.load (module.js:458:32)\n    at tryModuleLoad (module.js:417:12)\n    at Function.Module._load (module.js:409:3)\n    at Module.require (module.js:468:17)\n    at require (internal/module.js:20:19)\n    at /Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:220:27\n    at Array.forEach (native)\n    at Mocha.loadFiles (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:217:14)\n    at Mocha.run (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:485:10)\n    at Object.<anonymous> (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/bin/_mocha:403:18)\n    at Module._compile (module.js:541:32)\n    at Object.Module._extensions..js (module.js:550:10)\n    at Module.load (module.js:458:32)\n    at tryModuleLoad (module.js:417:12)\n    at Function.Module._load (module.js:409:3)\n    at Module.runMain (module.js:575:10)\n    at run (bootstrap_node.js:352:7)\n    at startup (bootstrap_node.js:144:9)\n    at bootstrap_node.js:467:3')
 		expect(objct).to.include({
 			'internalOnly': false,
 			'internalMessage': "I'm the internal message for developer eyes only",
@@ -56,9 +59,12 @@ describe('Rich-Error', function(){
 	it('copy calls toObject', function(){
 		let copy = remie.copy(exRich) // need to create error: code, message, stack, etc. properties
 		expect(copy).to.be.instanceof(RichError)
-		expect(copy.error).to.have.property('code').and.to.equal('server.400.forbidden')
-		expect(copy.error).to.have.property('message').and.to.equal('Something went wrong')
-		expect(copy.error).to.have.property('stack')//.and.to.equal('Error: Something went wrong\n    at RichError.buildFromString (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:116:29)\n    at RichError.build (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:74:27)\n    at new RichError (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:52:10)\n    at REMIE.create (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/index.js:39:12)\n    at Object.<anonymous> (/Users/NicholasLivio/Documents/R2/REMIE-livio/test/index.test.js:10:17)\n    at Module._compile (module.js:541:32)\n    at Object.Module._extensions..js (module.js:550:10)\n    at Module.load (module.js:458:32)\n    at tryModuleLoad (module.js:417:12)\n    at Function.Module._load (module.js:409:3)\n    at Module.require (module.js:468:17)\n    at require (internal/module.js:20:19)\n    at /Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:220:27\n    at Array.forEach (native)\n    at Mocha.loadFiles (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:217:14)\n    at Mocha.run (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:485:10)\n    at Object.<anonymous> (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/bin/_mocha:403:18)\n    at Module._compile (module.js:541:32)\n    at Object.Module._extensions..js (module.js:550:10)\n    at Module.load (module.js:458:32)\n    at tryModuleLoad (module.js:417:12)\n    at Function.Module._load (module.js:409:3)\n    at Module.runMain (module.js:575:10)\n    at run (bootstrap_node.js:352:7)\n    at startup (bootstrap_node.js:144:9)\n    at bootstrap_node.js:467:3')
+		expect(copy.error).to.have.property('code')
+		.and.to.equal('server.400.forbidden')
+		expect(copy.error).to.have.property('message')
+		.and.to.equal('Something went wrong')
+		expect(copy.error).to.have.property('stack')
+		//.and.to.equal('Error: Something went wrong\n    at RichError.buildFromString (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:116:29)\n    at RichError.build (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:74:27)\n    at new RichError (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:52:10)\n    at REMIE.create (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/index.js:39:12)\n    at Object.<anonymous> (/Users/NicholasLivio/Documents/R2/REMIE-livio/test/index.test.js:10:17)\n    at Module._compile (module.js:541:32)\n    at Object.Module._extensions..js (module.js:550:10)\n    at Module.load (module.js:458:32)\n    at tryModuleLoad (module.js:417:12)\n    at Function.Module._load (module.js:409:3)\n    at Module.require (module.js:468:17)\n    at require (internal/module.js:20:19)\n    at /Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:220:27\n    at Array.forEach (native)\n    at Mocha.loadFiles (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:217:14)\n    at Mocha.run (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:485:10)\n    at Object.<anonymous> (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/bin/_mocha:403:18)\n    at Module._compile (module.js:541:32)\n    at Object.Module._extensions..js (module.js:550:10)\n    at Module.load (module.js:458:32)\n    at tryModuleLoad (module.js:417:12)\n    at Function.Module._load (module.js:409:3)\n    at Module.runMain (module.js:575:10)\n    at run (bootstrap_node.js:352:7)\n    at startup (bootstrap_node.js:144:9)\n    at bootstrap_node.js:467:3')
 		expect(copy).to.include({
 			'internalOnly': false,
 			'internalMessage': "I'm the internal message for developer eyes only",
@@ -146,9 +152,12 @@ describe('Rich-Error', function(){
 			'messageData': undefined,
 			'referenceData': undefined,
 			'statusCode': 403})
-		expect(localeErr.error).to.have.property('code').and.to.equal('server.400.forbidden')		
-		expect(localeErr.error).to.have.property('message').and.to.equal('The page is forbidden')
-		expect(localeErr.error).to.have.property('stack')//.and.to.equal('Error: The page is forbidden\n    at RichError.buildFromLocale (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:101:29)\n    at Context.<anonymous> (/Users/NicholasLivio/Documents/R2/REMIE-livio/test/index.test.js:129:22)\n    at callFn (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runnable.js:334:21)\n    at Test.Runnable.run (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runnable.js:327:7)\n    at Runner.runTest (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:429:10)\n    at /Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:535:12\n    at next (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:349:14)\n    at /Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:359:7\n    at next (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:285:14)\n    at Immediate.<anonymous> (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:327:5)\n    at runCallback (timers.js:570:20)\n    at tryOnImmediate (timers.js:550:5)\n    at processImmediate [as _immediateCallback] (timers.js:529:5)')
+		expect(localeErr.error).to.have.property('code')
+		.and.to.equal('server.400.forbidden')		
+		expect(localeErr.error).to.have.property('message')
+		.and.to.equal('The page is forbidden')
+		expect(localeErr.error).to.have.property('stack')
+		//.and.to.equal('Error: The page is forbidden\n    at RichError.buildFromLocale (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:101:29)\n    at Context.<anonymous> (/Users/NicholasLivio/Documents/R2/REMIE-livio/test/index.test.js:129:22)\n    at callFn (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runnable.js:334:21)\n    at Test.Runnable.run (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runnable.js:327:7)\n    at Runner.runTest (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:429:10)\n    at /Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:535:12\n    at next (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:349:14)\n    at /Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:359:7\n    at next (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:285:14)\n    at Immediate.<anonymous> (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:327:5)\n    at runCallback (timers.js:570:20)\n    at tryOnImmediate (timers.js:550:5)\n    at processImmediate [as _immediateCallback] (timers.js:529:5)')
 		expect(localeErr.options).to.equal(options)
 	}),
 
@@ -162,9 +171,12 @@ describe('Rich-Error', function(){
 			'messageData': undefined,
 			'referenceData': undefined,
 			'statusCode': 400})
-		expect(stringErr.error).to.have.property('code').and.to.equal('server.400.forbidden')
-		expect(stringErr.error).to.have.property('message').and.to.equal('Something went wrong')
-		expect(stringErr.error).to.have.property('stack')//.and.to.equal('Error: Something went wrong\n    at RichError.buildFromString (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:116:29)\n    at Context.<anonymous> (/Users/NicholasLivio/Documents/R2/REMIE-livio/test/index.test.js:145:26)\n    at callFn (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runnable.js:334:21)\n    at Test.Runnable.run (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runnable.js:327:7)\n    at Runner.runTest (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:429:10)\n    at /Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:535:12\n    at next (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:349:14)\n    at /Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:359:7\n    at next (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:285:14)\n    at Immediate.<anonymous> (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:327:5)\n    at runCallback (timers.js:570:20)\n    at tryOnImmediate (timers.js:550:5)\n    at processImmediate [as _immediateCallback] (timers.js:529:5)')
+		expect(stringErr.error).to.have.property('code')
+		.and.to.equal('server.400.forbidden')
+		expect(stringErr.error).to.have.property('message')
+		.and.to.equal('Something went wrong')
+		expect(stringErr.error).to.have.property('stack')
+		//.and.to.equal('Error: Something went wrong\n    at RichError.buildFromString (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:116:29)\n    at Context.<anonymous> (/Users/NicholasLivio/Documents/R2/REMIE-livio/test/index.test.js:145:26)\n    at callFn (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runnable.js:334:21)\n    at Test.Runnable.run (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runnable.js:327:7)\n    at Runner.runTest (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:429:10)\n    at /Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:535:12\n    at next (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:349:14)\n    at /Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:359:7\n    at next (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:285:14)\n    at Immediate.<anonymous> (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:327:5)\n    at runCallback (timers.js:570:20)\n    at tryOnImmediate (timers.js:550:5)\n    at processImmediate [as _immediateCallback] (timers.js:529:5)')
 	}),
 
 	it('guessStatusCodeOfLocale properly guesses status code', function(){
@@ -175,11 +187,13 @@ describe('Rich-Error', function(){
 		expect(guess('server.400.test')).to.equal(400)
 	}),
 
-	it('set returns an object with Rich Error properties', function(){
-		let callSet = other.set(exRich)
+	it('set returns a Rich Error wih the expected properties', function(){ // will always return a RichError
+		let callSet = other.set(exRich) // other must be a RichError to call set
 		expect(callSet).to.be.an.instanceof(RichError)
-		expect(callSet.error).to.have.property('code').and.to.equal('server.400.forbidden')
-		expect(callSet.error).to.have.property('message').and.to.equal('Something went wrong')
+		expect(callSet.error).to.have.property('code')
+		.and.to.equal('server.400.forbidden')
+		expect(callSet.error).to.have.property('message')
+		.and.to.equal('Something went wrong')
 		expect(callSet.error).to.have.property('stack')
 		expect(callSet).to.include({
 			'internalOnly': false, 
@@ -192,10 +206,24 @@ describe('Rich-Error', function(){
 		expect(callSet.error).to.be.an.instanceof(Error)
 	}),
 
+	/*it('set does not need to be sent a Rich Error to work', function(){
+		let other = {}
+		other.error = {}
+		other.error.message = 'hello'
+		other.error.code = 7
+		other.error.stack = 123
+		other.statusCode = 3
+		let callSet = exRich.set(other)
+		expect(callSet).to.have.property('statusCode').and.to.equal(3)
+	})*/
+
 	it('get returns error code, stack, or message', function(){
-		expect(exRich.get('code')).to.be.a('string').and.to.equal('server.400.forbidden')
-		expect(exRich.get('stack')).to.be.a('string')//.and.to.equal('Error: Something went wrong\n    at RichError.buildFromString (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:116:29)\n    at RichError.build (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:74:27)\n    at new RichError (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:52:10)\n    at REMIE.create (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/index.js:39:12)\n    at Object.<anonymous> (/Users/NicholasLivio/Documents/R2/REMIE-livio/test/index.test.js:10:17)\n    at Module._compile (module.js:541:32)\n    at Object.Module._extensions..js (module.js:550:10)\n    at Module.load (module.js:458:32)\n    at tryModuleLoad (module.js:417:12)\n    at Function.Module._load (module.js:409:3)\n    at Module.require (module.js:468:17)\n    at require (internal/module.js:20:19)\n    at /Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:220:27\n    at Array.forEach (native)\n    at Mocha.loadFiles (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:217:14)\n    at Mocha.run (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:485:10)\n    at Object.<anonymous> (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/bin/_mocha:403:18)\n    at Module._compile (module.js:541:32)\n    at Object.Module._extensions..js (module.js:550:10)\n    at Module.load (module.js:458:32)\n    at tryModuleLoad (module.js:417:12)\n    at Function.Module._load (module.js:409:3)\n    at Module.runMain (module.js:575:10)\n    at run (bootstrap_node.js:352:7)\n    at startup (bootstrap_node.js:144:9)\n    at bootstrap_node.js:467:3')
-		expect(exRich.get('message')).to.be.a('string').and.to.equal('Something went wrong')
+		expect(exRich.get('code')).to.be.a('string')
+		.and.to.equal('server.400.forbidden')
+		expect(exRich.get('stack')).to.be.a('string')
+		//.and.to.equal('Error: Something went wrong\n    at RichError.buildFromString (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:116:29)\n    at RichError.build (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:74:27)\n    at new RichError (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:52:10)\n    at REMIE.create (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/index.js:39:12)\n    at Object.<anonymous> (/Users/NicholasLivio/Documents/R2/REMIE-livio/test/index.test.js:10:17)\n    at Module._compile (module.js:541:32)\n    at Object.Module._extensions..js (module.js:550:10)\n    at Module.load (module.js:458:32)\n    at tryModuleLoad (module.js:417:12)\n    at Function.Module._load (module.js:409:3)\n    at Module.require (module.js:468:17)\n    at require (internal/module.js:20:19)\n    at /Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:220:27\n    at Array.forEach (native)\n    at Mocha.loadFiles (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:217:14)\n    at Mocha.run (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:485:10)\n    at Object.<anonymous> (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/bin/_mocha:403:18)\n    at Module._compile (module.js:541:32)\n    at Object.Module._extensions..js (module.js:550:10)\n    at Module.load (module.js:458:32)\n    at tryModuleLoad (module.js:417:12)\n    at Function.Module._load (module.js:409:3)\n    at Module.runMain (module.js:575:10)\n    at run (bootstrap_node.js:352:7)\n    at startup (bootstrap_node.js:144:9)\n    at bootstrap_node.js:467:3')
+		expect(exRich.get('message')).to.be.a('string')
+		.and.to.equal('Something went wrong')
 		expect(exRich.get()).to.equal(undefined)
 	}),
 
@@ -208,21 +236,24 @@ describe('Rich-Error', function(){
 			'level': 'error', 
 			'messageData': undefined, 
 			'referenceData': undefined, 
-			'statusCode': 400}).and.to.have.property('options')
+			'statusCode': 400})
+		.and.to.have.property('options')
 		expect(exRich.build(new Error())).to.include({
 			'internalOnly': false, 
 			'internalMessage': undefined, 
 			'level': 'error', 
 			'messageData': undefined, 
 			'referenceData': undefined, 
-			'statusCode': 500}).and.to.have.property('options').to.be.empty //calls buildFromSystemError
+			'statusCode': 500})
+			.and.to.have.property('options').to.be.empty //calls buildFromSystemError
 		expect(exRich.build('server.400.forbidden')).to.include({
 			'internalOnly': false, 
 			'internalMessage': undefined, 
 			'level': 'error', 
 			'messageData': undefined, 
 			'referenceData': undefined, 
-			'statusCode': 403}).and.to.have.property('options').to.be.empty //calls buildFromLocale
+			'statusCode': 403})
+			.and.to.have.property('options').to.be.empty //calls buildFromLocale
 		expect(exRich.build('error')).to.include({
 			'internalOnly': false, 
 			'internalMessage': undefined, 
@@ -242,6 +273,7 @@ describe('Rich-Error', function(){
 	it('toResponseObject', function() {
 		let exRich = remie.create('Something went wrong', options)
 		expect(exRich.toResponseObject()).to.be.an('object')
+		expect(exRich.toResponseObject()).to.not.be.an.instanceof(RichError)
 		expect(exRich.toResponseObject()).to.include({
 			'level': 'error', 
 			'statusCode': 400})
