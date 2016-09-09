@@ -33,8 +33,8 @@ describe('Rich-Error', function(){
 	}),
 
 	it('create returns empty Rich Error when sent undefined', function(){
-		expect(remie.create()).to.be.empty
 		expect(remie.create()).to.be.an.instanceof(RichError)
+		.and.to.be.empty
 	})
 
 	it("toObject returns object with Rich Error properties", function(){
