@@ -4,7 +4,7 @@ standardizes errors across micro-services
 ```js
 let remie = new (require('remie'))(),
 	exRich = remie.create(err, options, locale), // creates a new instance of Rich Error
-	copy = remie.copy(exRich), // makes a copy of the Rich Error
+	copy = remie.copy(exRich); // makes a copy of the Rich Error
 ```
 
 ## Parameters
