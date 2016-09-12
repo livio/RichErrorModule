@@ -14,7 +14,7 @@ let remie = new (require('remie'))(),
 | err | Object | ??? | Node.js error that ocurred | ```yes``` |
 | locale | String | ```server.500.generic``` | Similar to err.code??? | ```no``` |
 | err.code | String | default depends on other parameters? | Unique string "server.400.error" | ```no``` |
-| err.stack | String | ??? | String stack trace |
+| err.stack | String | ??? | String stack trace | ```no``` |
 | options.internalOnly | Boolean | ```false``` | Specifies an error for the developer only | ```no``` |
 | options.internalMessage | String | ```undefined``` | String message for developer | ```no``` |
 | options.level | String | ```error``` | String error level (e.g. warning, info, error, trace) | ```no``` |
@@ -50,8 +50,8 @@ $ npm install remie
 ## Examples
 First, clone the REMIE repo and install any dependencies:
 ```bash
-$ git clone https://github.com/livio/RichErrorModule.git
-$ cd RichErrorModule
+$ git clone https://github.com/livio/remie.git
+$ cd remie
 $ npm install
 ```
 Then run an example:

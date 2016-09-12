@@ -3,7 +3,7 @@
     "name": "Livio"
   },
   "bugs": {
-    "url": "https://github.com/livio/RichErrorModule/issues"
+    "url": "https://github.com/livio/remie/issues"
   },
   "contributors": [
     {
@@ -50,7 +50,7 @@
   "licenses": [
     {
       "type": "BSD-3-Clause",
-      "url": "https://github.com/livio/RichErrorModule/blob/master/license"
+      "url": "https://github.com/livio/remie/blob/master/license"
     }
   ],
   "main": "./libs",
@@ -58,7 +58,7 @@
   "private": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/livio/RichErrorModule"
+    "url": "https://github.com/livio/remie"
   },
   "scripts": {
     "test": "mocha test/index.test.js",
