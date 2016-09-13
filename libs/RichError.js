@@ -18,6 +18,7 @@ class RichError{
 
   build(err, options = {}) {
     //console.log('build was called') //temp
+    var i18next = options.i18next
     let self = this;
     if(err === undefined) {
       if (options.internalMessage !== undefined) {
@@ -62,6 +63,10 @@ class RichError{
   buildFromLocale(locale = DEFAULT_ERROR_LOCALE, options = {}) { // 'server.500.generic'
     //console.log('buildFromLocale was called') //temp
     let richErrorObject = {};
+
+    //let i18next = options.i18next
+    //options.i18next = undefined
+
     richErrorObject.error = new Error(i18next.t(locale, options.i18next)); // options.i18next can not be i18next because of this line. It would mean calling translate on itself
     richErrorObject.error.code = locale.toLowerCase();
     richErrorObject.internalOnly = (options.internalOnly === true) ? true : false;
