@@ -23,13 +23,6 @@ const DEFAULT_ERROR_MESSAGE = "Internal server error!",
 
 class REMIE {
   constructor(err, options = {}) {
-    let self = this
-    process.on('uncaughtException', function(err){
-      console.log('REMIE detected an error!')
-      var richieRich = self.create(err)
-      console.log(richieRich)
-      return richieRich
-    })
     return this
   };
 

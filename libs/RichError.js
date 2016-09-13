@@ -13,26 +13,6 @@ const ERROR_LEVEL_FATAL = 'fatal',
 
 class RichError{
   constructor(err, options) {
-    let i18next = require('i18next')
-    i18next.init({
-      lng: "en-US",
-      nsSeparator: false,
-      resources: {
-        en: {
-          translation: {
-          "server" : {
-            "400" : {
-              "notFound": "The page could not be found",
-              "forbidden": "The page is forbidden",
-              "unauthorized": "You are not authorized to access this page"
-              }
-            }
-          }
-        }
-      }
-    });
-    // move constants here?
-    //console.log('RE constructor was called')
     this.build(err, options)
   };
 
