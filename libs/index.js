@@ -3,8 +3,7 @@
  * ************************************************** */
 
 var i18next = require('i18next'), 
-//  EventEmitter = require('events').EventEmitter,
-//  addEventListener = require('events').addEventListener,
+  EventEmitter = require('events').EventEmitter,
   util = require('util');
 const ERROR_LEVEL_FATAL = 'fatal',
   ERROR_LEVEL_ERROR = 'error',
@@ -21,33 +20,34 @@ const DEFAULT_ERROR_MESSAGE = "Internal server error!",
  * ******************** RichError Class
  * ************************************************** */
 
-class REMIE {
+class Remie {
   constructor(err, options = {}) {
+    this.on('error', function(error){
+      console.log('eventemitter worked')
+      console.log(error)
+    })
     return this
   };
 
   create(err, options = {}) {
-    //console.log('create was called')
     return new RichError(err, options)
   }
 
   static buildInternal(err, options) { 
-    //console.log('static was called') //temporary
     options.internalOnly = true;
     return new RichError(err, options);
   };
 
   copy(rich) {
-    //console.log('copy was called')
-    return new RichError(rich.toObject()); //change to RichError when errors are fixed
+    return new RichError(rich.toObject());
   };
 };
 
-//util.inherits(REMIE, EventEmitter)
+util.inherits(Remie, EventEmitter)
 
 
 /* ************************************************** *
  * ******************** Require Other Classes
  * ************************************************** */
 let RichError = require('./RichError.js')
-module.exports = REMIE
+module.exports = Remie
