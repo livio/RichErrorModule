@@ -33,7 +33,6 @@ i18next.init({
     }
 })
 options.i18next = i18next
-
 describe('Remie', function(){
 	describe('constructor', function() {
 		it('constructor returns a Remie', function(){
@@ -69,18 +68,15 @@ describe('Remie', function(){
 })
 describe('RichError', function(){
 	describe('constructor', function(){
-
 	})
 	describe('build', function(){
 		it('build returns undefined when passed an undefined err', function(){
 			expect(remie.create().build(undefined)).to.equal(undefined)
 		})
-
 		it('build returns undefined and logs internal Message when err is undefined but options.internalMessage is not', function(){
 			expect(remie.create().build(undefined, options)).to.equal(3)
 		})
 		it('build calls correct methods and they run properly when sent correct parameters', function(){
-			expect(remie.create().build(undefined, options)).to.equal(3)
 			expect(remie.create().build(undefined)).to.equal(undefined)
 			expect(remie.create().build(exRich)).to.include({
 				'internalOnly': false, 
