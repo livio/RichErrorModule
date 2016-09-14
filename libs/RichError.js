@@ -217,7 +217,6 @@ class RichError{
   }
   seti18next(options = {}) {
     if (options.i18next) {
-      console.log('i18next was set')
       var i18next = options.i18next;
       delete options.i18next
     }
