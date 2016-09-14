@@ -1,51 +1,43 @@
-let expect = require('chai').expect,
+var expect = require('chai').expect,
 	assert = require('chai').assert,
 	RichError = require('../libs/RichError.js'),
-	REMIE = require('../libs/index.js'),
+	Remie = require('../libs/index.js'),
 	options = {};
 	options.internalMessage = "I'm the internal message for developer eyes only",
 	options.code = 'server.400.forbidden',
 	options.statusCode = 400,
-	remie = new REMIE('Something went wrong', options), // used to call REMIE methods, need create an instance of REMIE with RichError properties
+	remie = new Remie('Something went wrong', options), // used to call REMIE methods, need create an instance of REMIE with RichError properties
 	exRich = remie.create('Something went wrong', options), // used to call Rich Error methods
-	locale = 'server.400.forbidden',
+//	locale = 'server.400.forbidden',
 	i18next = require('i18next')
-	err = {},
-	other = remie.create(err, options)
-err.code = 'server.400.notFound'
-err.message = 'message in an error'
-err.stack = 'stack would go here'
-    i18next.init({
-      lng: "en-US",
-      nsSeparator: false,
-      resources: {
-        en: {
-          translation: {
-          "server" : {
-            "400" : {
-              "notFound": "The page could not be found",
-              "forbidden": "The page is forbidden",
-              "unauthorized": "You are not authorized to access this page"
-              }
-            }
-          }
+	myErr = {},
+	other = remie.create(myErr, options)
+myErr.code = 'server.400.notFound'
+myErr.message = 'message in an error'
+myErr.stack = 'stack would go here'
+i18next.init({
+	lng: "en-US",
+    nsSeparator: false,
+    resources: {
+    	en: {
+            translation: {
+                "server" : {
+            	  	"400" : {
+            		"notFound": "The page could not be found",
+                	"forbidden": "The page is forbidden",
+                	"unauthorized": "You are not authorized to access this page"
+              		}
+            	}
+ 			}
         }
-      }
-    })
+    }
+})
 options.i18next = i18next
-	
-//causes and catches an error
-/*try {
-	let exRich = RichError.create("Something went wrong", {});
-} catch (e) {
-	console.log('error caught')
-	console.log(e)
-}*/
 
 describe('Remie', function(){
 	describe('constructor', function() {
 		it('constructor returns a Remie', function(){
-			expect(new REMIE()).to.be.an.instanceof(REMIE)
+			expect(new Remie()).to.be.an.instanceof(Remie)
 		})
 	})
 	describe('create', function(){
@@ -58,7 +50,7 @@ describe('Remie', function(){
 		it('copy calls toObject', function(){
 			let copy = remie.copy(exRich) // need to create error: code, message, stack, etc. properties
 			expect(copy).to.be.instanceof(RichError)
-			expect(copy.error).to.have.property('code')
+			expect(copy).to.have.property('error').and.to.have.property('code')
 			.and.to.equal('server.400.forbidden')
 			expect(copy.error).to.have.property('message')
 			.and.to.equal('Something went wrong')
@@ -87,7 +79,7 @@ describe('RichError', function(){
 		it('build returns undefined and logs internal Message when err is undefined but options.internalMessage is not', function(){
 			expect(remie.create().build(undefined, options)).to.equal(3)
 		})
-		it('build calls correct methods and they run properly WHEN SENT CORRECT PARAMETERS', function(){
+		it('build calls correct methods and they run properly when sent correct parameters', function(){
 			expect(remie.create().build(undefined, options)).to.equal(3)
 			expect(remie.create().build(undefined)).to.equal(undefined)
 			expect(remie.create().build(exRich)).to.include({
@@ -97,7 +89,7 @@ describe('RichError', function(){
 				'messageData': undefined, 
 				'referenceData': undefined, 
 				'statusCode': 400})
-			.and.to.have.property('options')
+				.and.to.have.property('options')
 			expect(remie.create().build(new Error())).to.include({
 				'internalOnly': false, 
 				'internalMessage': undefined, 
@@ -121,6 +113,7 @@ describe('RichError', function(){
 				'messageData': undefined, 
 				'referenceData': undefined, 
 				'statusCode': 500}) //calls buildFromString
+				.and.to.have.property('options').to.be.empty
 			expect(remie.create().build({})).to.include({
 				'internalOnly': undefined, 
 				'internalMessage': undefined,
@@ -128,7 +121,7 @@ describe('RichError', function(){
 				'messageData': undefined, 
 				'referenceData': undefined, 
 				'statusCode': undefined})
-
+				.and.to.have.property('options').to.be.empty
 			expect(remie.create().build(exRich, options)).to.include({
 				'internalOnly': false, 
 				'internalMessage': "I'm the internal message for developer eyes only",
@@ -136,7 +129,7 @@ describe('RichError', function(){
 				'messageData': undefined, 
 				'referenceData': undefined, 
 				'statusCode': 400})
-			.and.to.have.property('options')
+				.and.to.have.property('options')
 			expect(remie.create().build(new Error(), options)).to.include({
 				'internalOnly': false, 
 				'internalMessage': 'I\'m the internal message for developer eyes only', 
@@ -145,7 +138,7 @@ describe('RichError', function(){
 				'referenceData': undefined, 
 				'statusCode': 400})
 				.and.to.have.property('options').to.equal(options) //calls buildFromSystemError
-			expect(remie.create().build('server.400.forbidden')).to.include({ // can not be sent options because i18next would be translating itself, "converting circular structure to JSON"
+			expect(remie.create().build('server.400.forbidden')).to.include({
 				'internalOnly': false, 
 				'internalMessage': undefined, 
 				'level': 'error', 
@@ -160,6 +153,7 @@ describe('RichError', function(){
 				'messageData': undefined, 
 				'referenceData': undefined, 
 				'statusCode': 400}) //calls buildFromString
+				.and.to.have.property('options').to.equal(options)
 			expect(remie.create().build({}, options)).to.include({
 				'internalOnly': undefined, 
 				'internalMessage': undefined,
@@ -167,6 +161,7 @@ describe('RichError', function(){
 				'messageData': undefined, 
 				'referenceData': undefined, 
 				'statusCode': undefined})
+				.and.to.have.property('options').to.equal(undefined)
 		})
 	})
 	describe('buildFromSystemError', function(){
@@ -180,8 +175,8 @@ describe('RichError', function(){
 				'messageData': undefined, 
 				'referenceData': undefined, 
 				'statusCode': 500})
-			expect(defSystErr.error).to.be.an.instanceof(Error)
-			expect(defSystErr.options).to.be.empty
+			expect(defSystErr).to.have.property('error').and.to.be.an.instanceof(Error)
+			expect(defSystErr).to.have.property('options').and.to.be.empty
 		})
 		it('buildFromSystemError returns an object with expected properties of a Rich Error', function(){
 			let systemErr = remie.create().buildFromSystemError(err, options)
@@ -193,11 +188,11 @@ describe('RichError', function(){
 				'messageData': undefined, 
 				'referenceData': undefined, 
 				'statusCode': 400})
-			expect(systemErr.error).to.include({
+			expect(systemErr).to.have.property('error').and.to.include({
 				'code': 'server.400.notfound', 
 				'message': 'message in an error', 
 				'stack': 'stack would go here'})
-			expect(systemErr.options).to.equal(options)
+			expect(systemErr).to.have.property('options').and.to.equal(options)
 		})
 	})
 	describe('buildFromLocale', function(){
@@ -211,13 +206,14 @@ describe('RichError', function(){
 				'messageData': undefined, 
 				'referenceData': undefined, 
 				'statusCode': 500})
-			expect(defLocaleErr.error).to.be.an.instanceof(Error)
-			expect(defLocaleErr.options).to.be.empty
+			expect(defLocaleErr).to.have.property('error').and.to.be.an.instanceof(Error)
+			expect(defLocaleErr).to.have.property('options').and.to.be.empty
 		})
 		it('buildFromLocale returns an object with expected properties of a Rich Error', function(){
 			let options = {};
 			options.internalMessage = "I'm the internal message for developer eyes only",
 			options.code = 'server.400.forbidden',
+			options.i18next = require('i18next'),
 			localeErr = remie.create().buildFromLocale('server.400.forbidden', options)
 			expect(localeErr).to.be.an('object')
 			expect(localeErr).to.include({
@@ -228,14 +224,14 @@ describe('RichError', function(){
 				'referenceData': undefined,
 				'statusCode': 403
 			})
-			expect(localeErr.error).to.have.property('code')
+			expect(localeErr).to.have.property('error').to.have.property('code')
 			.and.to.equal('server.400.forbidden')		
 			expect(localeErr.error).to.have.property('message')
-			.and.to.equal('The page is forbidden')
+			.and.to.equal('The page is forbidden') //should be 'This page is forbidden'
 			expect(localeErr.error).to.have.property('stack')
 			//.and.to.equal('Error: The page is forbidden\n    at RichError.buildFromLocale (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:101:29)\n    at Context.<anonymous> (/Users/NicholasLivio/Documents/R2/REMIE-livio/test/index.test.js:129:22)\n    at callFn (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runnable.js:334:21)\n    at Test.Runnable.run (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runnable.js:327:7)\n    at Runner.runTest (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:429:10)\n    at /Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:535:12\n    at next (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:349:14)\n    at /Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:359:7\n    at next (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:285:14)\n    at Immediate.<anonymous> (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/runner.js:327:5)\n    at runCallback (timers.js:570:20)\n    at tryOnImmediate (timers.js:550:5)\n    at processImmediate [as _immediateCallback] (timers.js:529:5)')
-			expect(localeErr.options).to.equal(options)
-		})
+			expect(localeErr).to.have.property('options').and.to.equal(options)
+			})
 	})
 	describe('buildFromString', function(){
 		it('buildFromString returns an object with default properties of a Rich Error', function(){
@@ -248,7 +244,7 @@ describe('RichError', function(){
 				'messageData': undefined, 
 				'referenceData': undefined, 
 				'statusCode': 500})
-			expect(defStringErr.error).to.be.an.instanceof(Error)
+			expect(defStringErr).to.have.property('error').and.to.be.an.instanceof(Error)
 			expect(defStringErr.options).to.be.empty
 		})
 		it('buildFromString returns an object with expected properties of a Rich Error', function(){
@@ -261,7 +257,7 @@ describe('RichError', function(){
 				'messageData': undefined,
 				'referenceData': undefined,
 				'statusCode': 400})
-			expect(stringErr.error).to.have.property('code')
+			expect(stringErr).to.have.property('error').and.to.have.property('code') // can't use include on an error
 			.and.to.equal('server.400.forbidden')
 			expect(stringErr.error).to.have.property('message')
 			.and.to.equal('Something went wrong')
@@ -297,11 +293,11 @@ describe('RichError', function(){
 		it('set returns a Rich Error wih the expected properties', function(){ // will always return a RichError
 			let callSet = remie.create().set(exRich) // other must be a RichError to call set
 			expect(callSet).to.be.an.instanceof(RichError)
-			expect(callSet.error).to.have.property('code')
+			expect(callSet).to.have.property('error').and.to.have.property('code')
 			.and.to.equal('server.400.forbidden')
-			expect(callSet.error).to.have.property('message')
+			expect(callSet).to.have.property('error').and.to.have.property('message')
 			.and.to.equal('Something went wrong')
-			expect(callSet.error).to.have.property('stack')
+			expect(callSet).to.have.property('error').and.to.have.property('stack')
 			expect(callSet).to.include({
 				'internalOnly': false, 
 				'internalMessage': "I'm the internal message for developer eyes only",
@@ -309,8 +305,8 @@ describe('RichError', function(){
 				'messageData': undefined, 
 				'referenceData': undefined, 
 				'statusCode': 400})
-			expect(callSet.options).to.equal(options)
-			expect(callSet.error).to.be.an.instanceof(Error)
+			expect(callSet).to.have.property('options').and.to.equal(options)
+			expect(callSet).to.have.property('error').and.to.be.an.instanceof(Error)
 		})
 	})
 	describe('toObject', function(){
@@ -318,11 +314,11 @@ describe('RichError', function(){
 			let objct = exRich.toObject()
 			expect(objct).to.be.an('object')
 			expect(objct).to.not.be.an.instanceof(RichError)	
-			expect(objct.error).to.have.property('code')
+			expect(objct).to.have.property('error').and.to.have.property('code')
 			.and.to.equal('server.400.forbidden')
-			expect(objct.error).to.have.property('message')
+			expect(objct).to.have.property('error').and.to.have.property('message')
 			.and.to.equal('Something went wrong')
-			expect(objct.error).to.have.property('stack')
+			expect(objct).to.have.property('error').and.to.have.property('stack')
 			//.and.to.equal('Error: Something went wrong\n    at RichError.buildFromString (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:116:29)\n    at RichError.build (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:74:27)\n    at new RichError (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/RichError.js:52:10)\n    at REMIE.create (/Users/NicholasLivio/Documents/R2/REMIE-livio/libs/index.js:39:12)\n    at Object.<anonymous> (/Users/NicholasLivio/Documents/R2/REMIE-livio/test/index.test.js:10:17)\n    at Module._compile (module.js:541:32)\n    at Object.Module._extensions..js (module.js:550:10)\n    at Module.load (module.js:458:32)\n    at tryModuleLoad (module.js:417:12)\n    at Function.Module._load (module.js:409:3)\n    at Module.require (module.js:468:17)\n    at require (internal/module.js:20:19)\n    at /Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:220:27\n    at Array.forEach (native)\n    at Mocha.loadFiles (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:217:14)\n    at Mocha.run (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/lib/mocha.js:485:10)\n    at Object.<anonymous> (/Users/NicholasLivio/.nvm/versions/node/v6.3.1/lib/node_modules/mocha/bin/_mocha:403:18)\n    at Module._compile (module.js:541:32)\n    at Object.Module._extensions..js (module.js:550:10)\n    at Module.load (module.js:458:32)\n    at tryModuleLoad (module.js:417:12)\n    at Function.Module._load (module.js:409:3)\n    at Module.runMain (module.js:575:10)\n    at run (bootstrap_node.js:352:7)\n    at startup (bootstrap_node.js:144:9)\n    at bootstrap_node.js:467:3')
 			expect(objct).to.include({
 				'internalOnly': false,
@@ -341,9 +337,10 @@ describe('RichError', function(){
 			expect(exRich.toResponseObject()).to.include({
 				'level': 'error', 
 				'statusCode': 400})
-			expect(exRich.toResponseObject().error).to.include({
+			expect(exRich.toResponseObject()).to.have.property('error').to.include({
 				'message': 'Something went wrong', 
 				'code': 'server.400.forbidden'})
+			expect
 		})
 	})
 	/*it('set does not need to be sent a Rich Error to work', function(){
