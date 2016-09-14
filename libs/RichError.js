@@ -1,6 +1,6 @@
 let EventEmitter = require('events').EventEmitter;
 var inherits = require('util').inherits;
-
+var i18next
 const ERROR_LEVEL_FATAL = 'fatal',
   ERROR_LEVEL_ERROR = 'error',
   ERROR_LEVEL_WARN = 'warn',
