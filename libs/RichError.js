@@ -1,6 +1,5 @@
-let EventEmitter = require('events');
-let i18next = require('i18next'),
-  _ = require('lodash');
+let EventEmitter = require('events').EventEmitter;
+var inherits = require('util').inherits;
 
 const ERROR_LEVEL_FATAL = 'fatal',
   ERROR_LEVEL_ERROR = 'error',
@@ -17,13 +16,13 @@ class RichError{
   };
 
   build(err, options = {}) {
-    //console.log('build was called') //temp
-    var i18next = options.i18next
+    //var i18next
+    let i18next = this.seti18next(options)
     let self = this;
     if(err === undefined) {
       if (options.internalMessage !== undefined) {
-        console.log(options.internalMessage)
-        return 3 // TODO find out what happens as a result of returning 3
+        //this.emit('error', options.internalMessage) // tests stop working when error is thrown
+        return 3 // TODO find out what happens as a result of returning 3, nothing?
       };
       return undefined
     } else {
@@ -46,7 +45,6 @@ class RichError{
     return this;
   };
   buildFromSystemError(err = new Error(DEFAULT_ERROR_MESSAGE), options = {}) { // 'Internal server error!'
-    //console.log('buildFromSystemError was called') //temp
     let richErrorObject = {};
     richErrorObject.error = err;
     richErrorObject.error.code = (err.code) ? err.code.toLowerCase() : undefined;
@@ -61,13 +59,10 @@ class RichError{
   };
 
   buildFromLocale(locale = DEFAULT_ERROR_LOCALE, options = {}) { // 'server.500.generic'
-    //console.log('buildFromLocale was called') //temp
     let richErrorObject = {};
-
-    //let i18next = options.i18next
-    //options.i18next = undefined
-
-    richErrorObject.error = new Error(i18next.t(locale, options.i18next)); // options.i18next can not be i18next because of this line. It would mean calling translate on itself
+    //let i18next
+    i18next = this.seti18next(options)
+    richErrorObject.error = (i18next) ? new Error(i18next.t(locale, options.i18next)) : new Error(locale); // options.i18next can not be i18next because of this line. It would mean calling translate on itself
     richErrorObject.error.code = locale.toLowerCase();
     richErrorObject.internalOnly = (options.internalOnly === true) ? true : false;
     richErrorObject.internalMessage = options.internalMessage || undefined;
@@ -80,7 +75,6 @@ class RichError{
   };
 
   buildFromString(errorString = DEFAULT_ERROR_MESSAGE, options = {}) { // 'Internal server error!'
-    //console.log('buildFromString was called') //temp
     let richErrorObject = {};
     richErrorObject.error = new Error(errorString);
     richErrorObject.error.code = (options.code) ? options.code.toLowerCase() : undefined;
@@ -221,7 +215,14 @@ class RichError{
       return undefined;
     }
   }
+  seti18next(options = {}) {
+    if (options.i18next) {
+      console.log('i18next was set')
+      var i18next = options.i18next;
+      delete options.i18next
+    }
+    return i18next
+  }
 };
+inherits(RichError, EventEmitter)
 module.exports = RichError
-
-var inherits = require('util').inherits;  
