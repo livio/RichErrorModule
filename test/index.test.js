@@ -14,7 +14,7 @@ var expect = require('chai').expect,
 	other = remie.create(myErr, options)
 myErr.code = 'server.400.notFound'
 myErr.message = 'message in an error'
-myErr.stack = 'stack would go here'
+myErr.stack = 'stack: tells you where the error came from'
 i18next.init({
 	lng: "en-US",
     nsSeparator: false,
@@ -125,7 +125,7 @@ describe('RichError', function(){
 				'messageData': undefined, 
 				'referenceData': undefined, 
 				'statusCode': 400})
-				.and.to.have.property('options')
+				.and.to.have.property('options').to.equal(options)
 			expect(remie.create().build(new Error(), options)).to.include({
 				'internalOnly': false, 
 				'internalMessage': 'I\'m the internal message for developer eyes only', 
@@ -134,14 +134,14 @@ describe('RichError', function(){
 				'referenceData': undefined, 
 				'statusCode': 400})
 				.and.to.have.property('options').to.equal(options) //calls buildFromSystemError
-			expect(remie.create().build('server.400.forbidden')).to.include({
+			expect(remie.create().build('server.400.forbidden', options)).to.include({
 				'internalOnly': false, 
-				'internalMessage': undefined, 
+				'internalMessage': 'I\'m the internal message for developer eyes only', 
 				'level': 'error', 
 				'messageData': undefined, 
 				'referenceData': undefined, 
-				'statusCode': 500})
-				.and.to.have.property('options').to.be.empty //calls buildFromLocale
+				'statusCode': 400})
+				.and.to.have.property('options').to.equal(options) //calls buildFromLocale
 			expect(remie.create().build('error', options)).to.include({
 				'internalOnly': false, 
 				'internalMessage': 'I\'m the internal message for developer eyes only', 
@@ -175,7 +175,7 @@ describe('RichError', function(){
 			expect(defSystErr).to.have.property('options').and.to.be.empty
 		})
 		it('buildFromSystemError returns an object with expected properties of a Rich Error', function(){
-			let systemErr = remie.create().buildFromSystemError(err, options)
+			let systemErr = remie.create().buildFromSystemError(myErr, options)
 			expect(systemErr).to.be.an('object')
 			expect(systemErr).to.include({
 				'internalOnly': false, 
@@ -187,7 +187,7 @@ describe('RichError', function(){
 			expect(systemErr).to.have.property('error').and.to.include({
 				'code': 'server.400.notfound', 
 				'message': 'message in an error', 
-				'stack': 'stack would go here'})
+				'stack': 'stack: tells you where the error came from'})
 			expect(systemErr).to.have.property('options').and.to.equal(options)
 		})
 	})
@@ -336,7 +336,6 @@ describe('RichError', function(){
 			expect(exRich.toResponseObject()).to.have.property('error').to.include({
 				'message': 'Something went wrong', 
 				'code': 'server.400.forbidden'})
-			expect
 		})
 	})
 	/*it('set does not need to be sent a Rich Error to work', function(){
