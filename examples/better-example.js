@@ -1,30 +1,50 @@
 /* ************************************************** *
  * ******************** REMIE
  * ************************************************** */
-let REMIE = require('../libs/index.js'),
+var Remie = require('../libs/index.js'),
 //  remie = new (require('../libs/index.js'))(),
-  i18next = require('i18next'),
-  EventEmitter = require('events');
+  EventEmitter = require('events').EventEmitter;
   //EventListener = require('events').EventListener;
 var inherits = require('util').inherits;
-err = 'server.400.notFound'
+myErr = new Error('Something went wrong')
 
 let options = {}
-options.internalMessage = 'internal Message'
-options.level = 'warning'
-//options.code = 'server.400.notFound'
+options.internalMessage = 'I\'m the internal message for developer eyes only'
+options.level = 'error'
+options.code = 'server.400.forbidden'
+
+var i18next = require('i18next')
+i18next.init({
+  lng: "en-US",
+  nsSeparator: false,
+  resources: {
+    en: {
+      translation: {
+      "server" : {
+        "400" : {
+          "notFound": "The page could not be found",
+          "forbidden": "The page is forbidden",
+          "unauthorized": "You are not authorized to access this page"
+          }
+        }
+      }
+    }
+  }
+});
+
+options.i18next = i18next
 
 let locale = 'server.400.notFound'
-let remie = new REMIE(err, options, locale)
-let other = remie.create(err, options) 
+let remie = new Remie(myErr, options)
+let other = remie.create(locale, options) // sends locale as err 
+let other2 = remie.create(locale, options) // does not have i18next
 let copy = remie.copy(other)
+console.log(other)
+console.log(other2)
 try {
-  let exRich = RichError.create("Something went wrong", {});
-} catch (e) {
-  var exRemie = remie.create(e, options)
+  let exRich = notReal.create("Something went wrong", {}); // calls a function that doesn't exist, throws error
+} catch (e) { // error is caught here
+  var exRemie = remie.create(e, options) // uses the error and options to create new RichError
+  console.log(exRemie)
 }
-
-let exRich = notReal() // throw ReferenceError that is caught by remie
-// program stops after the error
-console.log(exRich + '2')
-console.log('It\'s still running!')
+remie.create(undefined, options)
