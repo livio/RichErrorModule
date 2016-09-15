@@ -21,7 +21,7 @@ class RichError{
     let self = this;
     if(err === undefined) {
       if (options.internalMessage !== undefined) {
-        //this.emit('error', options.internalMessage) // tests stop working when error is thrown
+        this.emit('internalError', options.internalMessage) // tests stop working when error is thrown
         return 3 // TODO find out what happens as a result of returning 3, nothing?
       };
       return undefined

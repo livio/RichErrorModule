@@ -22,7 +22,7 @@ const DEFAULT_ERROR_MESSAGE = "Internal server error!",
 
 class Remie {
   constructor(err, options = {}) {
-    this.on('error', function(error){
+    this.on('internalError', function(error){
       console.log('eventemitter worked')
       console.log(error)
     })
