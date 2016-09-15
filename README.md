@@ -12,16 +12,16 @@ var Remie = require('remie')
 ## Parameters
 | Parameter | Type | Default | Description | Required |
 |-----------|------|---------|-------------|----------|
-| options | Object | ```{}``` | Overrides default behaviors | ```no``` |
 | err | Object | ```undefined``` | Node.js error that ocurred | ```yes``` |
-| locale | String | ```server.500.generic``` | Similar to err.code??? | ```no``` |
-| err.code | String | undefined | Unique string "server.400.error" | ```no``` |
-| err.stack | String | ??? | String stack trace | ```no``` |
+| err.code | String | ```undefined``` | Unique string "server.400.error" | ```no``` |
+| err.stack | String | ```undefined``` | String stack trace | ```no``` |
+| locale | String | ```server.500.generic``` | String used to determine the user's language | ```no``` |
+| options | Object | ```{}``` | Overrides default behaviors | ```no``` |
 | options.internalOnly | Boolean | ```false``` | Specifies an error for the developer only | ```no``` |
 | options.internalMessage | String | ```undefined``` | String message for developer | ```no``` |
 | options.level | String | ```error``` | String error level (e.g. warning, info, error, trace) | ```no``` |
-| options.messageData | ??? | ```undefined``` | Extra data included in the message | ```no``` |
-| options.referenceData | ??? | ```undefined``` | Data that may have caused the error | ```no``` |
+| options.messageData | String | ```undefined``` | Extra data included in the message | ```no``` |
+| options.referenceData | String | ```undefined``` | Data that may have caused the error | ```no``` |
 | options.statusCode | Number | ```500``` | HTTP status code (e.g. 200, 400, 500) | ```no``` |
 | options.i18next | Module | ```undefined``` | [i18next](http://i18next.com/docs/) | ```no```|
 
