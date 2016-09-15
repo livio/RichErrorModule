@@ -1,6 +1,7 @@
 let EventEmitter = require('events').EventEmitter;
 var inherits = require('util').inherits;
-var i18next
+var i18next;
+//var Remie = require('./index.js')
 const ERROR_LEVEL_FATAL = 'fatal',
   ERROR_LEVEL_ERROR = 'error',
   ERROR_LEVEL_WARN = 'warn',
@@ -9,19 +10,26 @@ const ERROR_LEVEL_FATAL = 'fatal',
   ERROR_LEVEL_TRACE = 'trace',
   DEFAULT_ERROR_MESSAGE = "Internal server error!",
   DEFAULT_ERROR_LOCALE = "server.500.generic";
+//inherits(Remie, EventEmitter)
 
 class RichError{
   constructor(err, options) {
+    /*this.on('internalError', function(error) {
+      console.log(error)
+    })*/
     this.build(err, options)
   };
 
   build(err, options = {}) {
-    //var i18next
     let i18next = this.seti18next(options)
+    let myEmit = new EventEmitter()
+    myEmit.on('internalError', function(error){
+      console.log(error)
+    })
     let self = this;
     if(err === undefined) {
       if (options.internalMessage !== undefined) {
-        this.emit('internalError', options.internalMessage) // tests stop working when error is thrown
+        myEmit.emit('internalError', options.internalMessage) // tests stop working when error is thrown
         return 3 // TODO find out what happens as a result of returning 3, nothing?
       };
       return undefined
@@ -179,8 +187,7 @@ class RichError{
     };
   };
 
-  toResponseObject(options = {}) {
-    //console.log('toResponseObject was called') //temp
+  toResponseObject(options = {}) { // Is this supposed to be what is returned to the user?
     let self = this,
       obj = {}; 
     if(self.internalOnly !== true && options.internalOnly !== false) { 
@@ -194,7 +201,7 @@ class RichError{
           error.code = self.error.code;
         }
         if (self.error.stack && errorOptions.stack !== false) {
-          error.stack = self.error.stack; //fix this so stack is not all put on one line/might not be happening here
+          error.stack = self.error.stack; //causes stack to be put on one line when logging entire RichError but not when logging stack only 
         }
         obj.error = error;
       }
@@ -222,6 +229,40 @@ class RichError{
     }
     return i18next
   }
+  removeEmptyProps() {
+    if(!this.error) {
+      delete this.error
+    } else {
+      if (!this.error.code) {
+      delete this.error.code
+      }
+      if (!this.error.message) {
+        delete this.error.message
+      }
+      if (!this.error.stack) {
+        delete this.error.stack
+      }
+    }
+    if (typeof this.internalOnly != 'boolean') {
+      delete this.internalOnly
+    }
+    if (!this.internalMessage) {
+      delete this.internalMessage
+    }
+    if (!this.level) {
+      delete this.level
+    }
+    if (!this.messageData) {
+      delete this.messageData
+    }
+    if (!this.referenceData) {
+      delete this.referenceData
+    }
+    if (!this.statusCode) {
+      delete this.statusCode
+    }
+    return this
+  }
 };
-inherits(RichError, EventEmitter)
+//inherits(RichError, EventEmitter)
 module.exports = RichError
