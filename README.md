@@ -7,6 +7,13 @@ var Remie = require('remie')
 	myErr = new Error('Something went wrong'),
 	options = {},
 	exRich = remie.create(myErr, options); // creates a new instance of Rich Error
+exRich = exRich.toResponseObject() // removes the empty properties
+/* exRich should look like this but stack will vary
+{ error: 
+   { message: 'Something went wrong',
+     stack: 'Error: Something went wrong\n    at /Users/You/wherever/your-file\n at here\n at there' },
+  level: 'error',
+  statusCode: 500 } */
 ```
 
 ## Parameters
@@ -37,7 +44,7 @@ var Remie = require('remie')
 | guessStatusCodeOfLocale | ```locale``` | Guesses the status code based on the locale. |
 | set | ```richErrorObject``` | Call this on a RichError and send it a different RichError or an object with similar properties to set the first's required properties to those of the second |
 | toObject | none | Returns an object with properties of the RichError |
-| toResponseObject | ```options``` | Uses options to return an object with the same properties |
+| toResponseObject | ```options``` | Returns an object with the existing properties of the RichError |
 | seti18next | ```options, i18next``` | sets i18next to equal options.i18next then deletes options.i18next |
 
 ## Remie Methods
