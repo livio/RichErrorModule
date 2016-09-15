@@ -22,10 +22,6 @@ const DEFAULT_ERROR_MESSAGE = "Internal server error!",
 
 class Remie {
   constructor(err, options = {}) {
-    this.on('internalError', function(error){
-      console.log('eventemitter worked')
-      console.log(error)
-    })
     return this
   };
 
@@ -42,12 +38,11 @@ class Remie {
     return new RichError(rich.toObject());
   };
 };
-
-util.inherits(Remie, EventEmitter)
+//util.inherits(Remie, EventEmitter)
 
 
 /* ************************************************** *
  * ******************** Require Other Classes
  * ************************************************** */
-let RichError = require('./RichError.js')
+var RichError = require('./RichError.js')
 module.exports = Remie
