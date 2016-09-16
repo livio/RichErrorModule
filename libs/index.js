@@ -12,8 +12,8 @@ var i18next = require('i18next'),
 
 class Remie {
   constructor(err, options = {}) {
-    this.on('internalError', function(error) {
-      console.log(error)
+    this.on('internalError', function(internalMessage) {
+      console.log(internalMessage)
     })
     return this
   };

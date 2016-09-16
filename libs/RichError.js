@@ -22,7 +22,9 @@ class RichError{
     let self = this;
     if(err === undefined) {
       if (options.internalMessage !== undefined) {
-        remie.emit('internalError', options.internalMessage)
+        if (remie) {
+          remie.emit('internalError', options.internalMessage)
+        }
         return 3
       };
       return undefined
@@ -218,8 +220,10 @@ class RichError{
     if (options.i18next) {
       var i18next = options.i18next;
       delete options.i18next
+      return i18next
+    } else {
+      return undefined
     }
-    return i18next
   }
   removeEmptyProps() {
     if(!this.error) {
