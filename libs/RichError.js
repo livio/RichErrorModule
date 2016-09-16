@@ -1,7 +1,6 @@
 let EventEmitter = require('events').EventEmitter;
 var inherits = require('util').inherits;
 var i18next;
-//var Remie = require('./index.js')
 const ERROR_LEVEL_FATAL = 'fatal',
   ERROR_LEVEL_ERROR = 'error',
   ERROR_LEVEL_WARN = 'warn',
@@ -10,27 +9,21 @@ const ERROR_LEVEL_FATAL = 'fatal',
   ERROR_LEVEL_TRACE = 'trace',
   DEFAULT_ERROR_MESSAGE = "Internal server error!",
   DEFAULT_ERROR_LOCALE = "server.500.generic";
-//inherits(Remie, EventEmitter)
 
 class RichError{
-  constructor(err, options) {
-    /*this.on('internalError', function(error) {
-      console.log(error)
-    })*/
-    this.build(err, options)
+  constructor(err, options, remie) {
+    this.build(err, options, remie)
   };
 
-  build(err, options = {}) {
-    let i18next = this.seti18next(options)
-    let myEmit = new EventEmitter()
-    myEmit.on('internalError', function(error){
-      console.log(error)
-    })
+  build(err, options = {}, remie) { // if called without using Remie.create() then a Remie instance must be supplied
+    if (!i18next) {
+      let i18next = this.seti18next(options)
+    }
     let self = this;
     if(err === undefined) {
       if (options.internalMessage !== undefined) {
-        myEmit.emit('internalError', options.internalMessage) // tests stop working when error is thrown
-        return 3 // TODO find out what happens as a result of returning 3, nothing?
+        remie.emit('internalError', options.internalMessage)
+        return 3
       };
       return undefined
     } else {
@@ -68,7 +61,6 @@ class RichError{
 
   buildFromLocale(locale = DEFAULT_ERROR_LOCALE, options = {}) { // 'server.500.generic'
     let richErrorObject = {};
-    //let i18next
     i18next = this.seti18next(options)
     richErrorObject.error = (i18next) ? new Error(i18next.t(locale, options.i18next)) : new Error(locale); // options.i18next can not be i18next because of this line. It would mean calling translate on itself
     richErrorObject.error.code = locale.toLowerCase();
@@ -187,7 +179,7 @@ class RichError{
     };
   };
 
-  toResponseObject(options = {}) { // Is this supposed to be what is returned to the user?
+  toResponseObject(options = {}) { // Is this supposed to be what is returned to the user? 
     let self = this,
       obj = {}; 
     if(self.internalOnly !== true && options.internalOnly !== false) { 
