@@ -4,17 +4,7 @@
 
 var i18next = require('i18next'), 
   EventEmitter = require('events').EventEmitter,
-  util = require('util');
-const ERROR_LEVEL_FATAL = 'fatal',
-  ERROR_LEVEL_ERROR = 'error',
-  ERROR_LEVEL_WARN = 'warn',
-  ERROR_LEVEL_INFO = 'info',
-  ERROR_LEVEL_DEBUG = 'debug',
-  ERROR_LEVEL_TRACE = 'trace';
-  
-const DEFAULT_ERROR_MESSAGE = "Internal server error!",
-  DEFAULT_ERROR_LOCALE = "server.500.generic";
-
+  inherits = require('util').inherits;
 
 /* ************************************************** *
  * ******************** RichError Class
@@ -22,24 +12,27 @@ const DEFAULT_ERROR_MESSAGE = "Internal server error!",
 
 class Remie {
   constructor(err, options = {}) {
+    this.on('internalError', function(error) {
+      console.log(error)
+    })
     return this
   };
 
-  create(err, options = {}) {
-    return new RichError(err, options)
+  create(err, options = {}, remie = new Remie()) {
+    return new RichError(err, options, remie)
   }
 
-  static buildInternal(err, options) { 
+// benefit of this being static? vvv
+  static buildInternal(err, options = {}, remie = new Remie()) { // err must be RichError, Error, or locale
     options.internalOnly = true;
-    return new RichError(err, options);
+    return new RichError(err, options, remie);
   };
 
   copy(rich) {
     return new RichError(rich.toObject());
   };
 };
-//util.inherits(Remie, EventEmitter)
-
+inherits(Remie, EventEmitter)
 
 /* ************************************************** *
  * ******************** Require Other Classes
