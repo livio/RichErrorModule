@@ -53,6 +53,7 @@ RichError {
 |--------|------------|-------------|
 | create | ```err, options, remie``` | Builds a new RichError instance |
 | copy | ```rich``` | Makes a copy of a RichError that has the same necessary properties |
+| buildInternal | ```err, options, remie``` | Use this when dealing with an internal error |
 
 ## Rich Error Methods
 ### call these methods by using exRich.method()
@@ -70,13 +71,6 @@ RichError {
 | seti18next | ```options, i18next``` | sets i18next to equal options.i18next then deletes options.i18next |
 | removeEmptyProps | none | Removes empty or undefined properties in the Rich Error |
 
-## buildInternal
-buildInternal is a static method and must be called using the Remie class, not an instance of Remie.
-It is used when dealing with an internal error.
-| Do | Don't | Parameters |
-|----|-------|------------|
-| Remie.buildInternal() | remie.buildInternal() | ```err, options, remie``` |
-
 ## Examples
 First, clone the Remie repo and install any dependencies:
 ```bash
@@ -86,7 +80,7 @@ $ npm install
 ```
 Then run an example:
 ```bash
-$ node examples/better-example.js
+$ node examples/remie-example.js
 ```
 
 ## Tests
