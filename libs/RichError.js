@@ -16,11 +16,44 @@ class RichError{
 
   build(err, options = {}, remie) { // if called without using Remie.create() then a Remie instance must be supplied
     // add space and comments here
-    // determine err type/instance in one line then add switch statement
-    if (!i18next) {
+    // determine err type/instance in one line then add switch statement. Is that possible?
+    if ( ! i18next) {
       let i18next = this.seti18next(options)
     }
     let self = this;
+
+    if(err === undefined) {
+      if (options.internalMessage !== undefined) {
+        if (remie) {
+          remie.emit('internalError', options.internalMessage)
+        }
+      };
+      return undefined
+    }
+    let errHasType = (typeof err == 'string' || err instanceof String) ? 'string' : (typeof err != 'object') ? 'something else' : (err instanceof RichError) ? 'richError' : (err instanceof Error) ? 'error' : undefined
+    switch(errHasType){
+      case 'richError':
+        console.log('RichError')
+        self.set(err.toObject(err));
+      case 'error':
+        console.log('Error')
+        self.set(this.buildFromSystemError(err, options));
+      case 'string':
+        if (i18next && i18next.exists(err)) { 
+            console.log('locale')
+            self.set(this.buildFromLocale(err, options));// err is a locale
+          } else {
+            console.log('string')
+            self.set(this.buildFromString(err, options));
+          };
+      case undefined:
+        console.log(undefined)
+        return undefined;
+      default:
+        console.log('Something else')
+        self.set(err);
+    }
+    /*
     if(err === undefined) {
       if (options.internalMessage !== undefined) {
         if (remie) {
@@ -52,7 +85,7 @@ class RichError{
           self.set(err);
         }
       }
-    }
+    }*/
     return this;
   };
   buildFromSystemError(err = new Error(DEFAULT_ERROR_MESSAGE), options = {}) { // 'Internal server error!'
@@ -85,6 +118,7 @@ class RichError{
   };
 
   buildFromString(errorString = DEFAULT_ERROR_MESSAGE, options = {}) { // 'Internal server error!'
+    console.log('buildFromString')
     let richErrorObject = {};
     richErrorObject.error = new Error(errorString);
     richErrorObject.error.code = (options.code) ? options.code.toLowerCase() : undefined;
@@ -120,7 +154,7 @@ class RichError{
       case "server.400.unauthorized":
         return 401;
       case undefined:
-        return 500; //find out what happens as a result of this
+        return 500;
       default:
         let categories = locale.split(".");
         if (categories.length != 0) {
@@ -231,40 +265,16 @@ class RichError{
     }
   }
   removeEmptyProps() {
-    let self = this;
-    //prototypical inheritance
-    /*if(!this.error) {
-      delete this.error
-    } else {
-      if (!this.error.code) {
-      delete this.error.code
-      }
-      if (!this.error.message) {
-        delete this.error.message
-      }
-      if (!this.error.stack) {
-        delete this.error.stack
+    let self = this,
+      key;
+    for (key in self){
+      if (self.hasOwnProperty(key)){
+        if (self[key] === undefined) {
+          delete self[key]
+        }
       }
     }
-    if (typeof this.internalOnly != 'boolean') {
-      delete this.internalOnly
-    }
-    if (!this.internalMessage) {
-      delete this.internalMessage
-    }
-    if (!this.level) {
-      delete this.level
-    }
-    if (!this.messageData) {
-      delete this.messageData
-    }
-    if (!this.referenceData) {
-      delete this.referenceData
-    }
-    if (!this.statusCode) {
-      delete this.statusCode
-    }
-    return this*/
+    return self
   }
 };
 module.exports = RichError
