@@ -1,5 +1,5 @@
 # REMIE (Rich Error Module Is Excellent)
-standardizes errors across micro-services
+standardizing errors across micro-services
 
 ## Installation
 ```bash
@@ -8,18 +8,27 @@ $ npm install remie
 
 ## Usage
 ```js
-var Remie = require('remie')
+var Remie = require('remie'),
 	remie = new Remie(),
 	myErr = new Error('Something went wrong'),
 	options = {},
 	exRich = remie.create(myErr, options); // creates a new instance of Rich Error
-exRich = exRich.toResponseObject() // removes the empty properties
-/* exRich should look like this but stack will vary
-{ error: 
-   { message: 'Something went wrong',
-     stack: 'Error: Something went wrong\n    at (/Users/You/wherever/your-file)\n    at here\n    at there    at file:line:col' },
+/* exRich should look like this but error.stack will vary:
+RichError {
+  error: 
+   { Error: Something went wrong
+       at Object.<anonymous> (/Users/You/wherever/your-file)
+       at here
+       at there
+       at file:line:col code: undefined },
+  internalOnly: false,
+  internalMessage: undefined,
   level: 'error',
-  statusCode: 500 } */
+  messageData: undefined,
+  options: {},
+  referenceData: undefined,
+  statusCode: 500 }
+   */
 ```
 
 ## Parameters
@@ -42,11 +51,11 @@ exRich = exRich.toResponseObject() // removes the empty properties
 ### call these methods by using remie.method()
 | Method | Parameters | Description |
 |--------|------------|-------------|
-| create | ```err, options``` | Builds a new RichError instance |
+| create | ```err, options, remie``` | Builds a new RichError instance |
 | copy | ```rich``` | Makes a copy of a RichError that has the same necessary properties |
 
 ## Rich Error Methods
-###call these methods by using exRich.method()
+### call these methods by using exRich.method()
 | Method | Parameters | Description |
 |--------|------------|-------------|
 | build | ```err, options, remie``` | Determines what err is, then calls the correct method |
@@ -59,9 +68,14 @@ exRich = exRich.toResponseObject() // removes the empty properties
 | toObject | none | Returns an object with properties of the RichError |
 | toResponseObject | ```options``` | If the RichError returned does not have internalOnly as true but it should then this can be used to return an object with the same properties as the RichError minus internal properties |
 | seti18next | ```options, i18next``` | sets i18next to equal options.i18next then deletes options.i18next |
+| removeEmptyProps | none | Removes empty or undefined properties in the Rich Error |
 
 ## buildInternal
-### If you want to build a Rich Error 
+buildInternal is a static method and must be called using the Remie class, not an instance of Remie.
+It is used when dealing with an internal error.
+| Do | Don't | Parameters |
+|----|-------|------------|
+| Remie.buildInternal() | remie.buildInternal() | ```err, options, remie``` |
 
 ## Examples
 First, clone the Remie repo and install any dependencies:
