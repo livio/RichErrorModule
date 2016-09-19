@@ -95,6 +95,3 @@ To run the tests, start by installing dependencies, then run ```npm test```:
 $ npm install
 $ npm test
 ```
-
-## License
-[Ford](license)

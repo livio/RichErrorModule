@@ -8,10 +8,13 @@ var Remie = require('../libs/index.js'),
   myErr = new Error('Something went wrong'),
   options = {};
 options.internalMessage = 'I\'m the internal message for developer eyes only'
+// explain
 options.level = 'error'
+// exlain
 options.code = 'server.400.forbidden'
 
 var i18next = require('i18next')
+// explain
 i18next.init({
   lng: "en-US",
   nsSeparator: false,

@@ -93,7 +93,7 @@ describe('RichError', function(){
 			expect(remie.create().build(undefined)).to.equal(undefined)
 		})
 		it('build returns undefined and logs internal Message when err is undefined but options.internalMessage is not', function(){
-			expect(remie.create().build(undefined, options, remie)).to.equal(3)
+			expect(remie.create().build(undefined, options, remie)).to.equal(undefined)
 		})
 		it('build calls correct methods and they run properly when sent correct parameters', function(){
 			expect(remie.create().build(undefined)).to.equal(undefined)

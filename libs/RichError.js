@@ -1,5 +1,4 @@
 let EventEmitter = require('events').EventEmitter;
-var inherits = require('util').inherits;
 var i18next;
 const ERROR_LEVEL_FATAL = 'fatal',
   ERROR_LEVEL_ERROR = 'error',
@@ -16,6 +15,8 @@ class RichError{
   };
 
   build(err, options = {}, remie) { // if called without using Remie.create() then a Remie instance must be supplied
+    // add space and comments here
+    // determine err type/instance in one line then add switch statement
     if (!i18next) {
       let i18next = this.seti18next(options)
     }
@@ -25,21 +26,28 @@ class RichError{
         if (remie) {
           remie.emit('internalError', options.internalMessage)
         }
-        return 3
       };
       return undefined
     } else {
+
+      // if already a rich error, copy the error
       if (err instanceof RichError) {
         self.set(err.toObject(err));
       } else {
+
+        // if a Node.js error, convert to rich error
         if (err instanceof Error) {
           self.set(this.buildFromSystemError(err, options));
+
+        // if a string, attempt to lookup in i18next and create new rich error
         } else if(typeof err === 'string' || err instanceof String) {
           if (i18next && i18next.exists(err)) { 
             self.set(this.buildFromLocale(err, options));// err is a locale
           } else {
             self.set(this.buildFromString(err, options));
           }
+
+        // This is just an object or method, probably invalid
         } else {
           self.set(err);
         }
@@ -91,7 +99,6 @@ class RichError{
   };
 
   get(key) {
-    //console.log('get was called')
     switch (key) {
       case "code":
       case "stack":
@@ -103,7 +110,6 @@ class RichError{
   };
 
   guessStatusCodeOfLocale(locale) {
-    //console.log("guessStatusCodeOfLocale") //temp
     switch (locale) {
     //case "server.400.badRequest":
       //  return 400;
@@ -128,7 +134,6 @@ class RichError{
   };
 
   set(richErrorObject) { 
-    //console.log('set was called') //temp
     // Node.js error object.  Contains two important child attributes "code" and "stack".
     if(richErrorObject.error instanceof Error) {
       this.error = richErrorObject.error;
@@ -163,7 +168,6 @@ class RichError{
   };
 
   toObject() {
-    //console.log('toObject was called') // temp
     let self = this
     return { //possibly need to restructure to work when one or more values is not given
       error: {
@@ -181,7 +185,8 @@ class RichError{
     };
   };
 
-  toResponseObject(options = {}) { // Is this supposed to be what is returned to the user? 
+  toResponseObject(options = {}) { // Is this supposed to be what is returned to the user? Yes
+    //change name
     let self = this,
       obj = {}; 
     if(self.internalOnly !== true && options.internalOnly !== false) { 
@@ -226,7 +231,9 @@ class RichError{
     }
   }
   removeEmptyProps() {
-    if(!this.error) {
+    let self = this;
+    //prototypical inheritance
+    /*if(!this.error) {
       delete this.error
     } else {
       if (!this.error.code) {
@@ -257,8 +264,7 @@ class RichError{
     if (!this.statusCode) {
       delete this.statusCode
     }
-    return this
+    return this*/
   }
 };
-//inherits(RichError, EventEmitter)
 module.exports = RichError
