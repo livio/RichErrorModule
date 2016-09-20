@@ -71,7 +71,7 @@ RichError {
 | set | ```richErrorObject``` | Call this on a RichError and send it a different RichError or an object with similar properties to set the first's required properties to those of the second |
 | toObject | none | Returns an object with properties of the RichError |
 | toResponseObject | ```options``` | If the RichError returned does not have internalOnly as true but it should then this can be used to return an object with the same properties as the RichError minus internal properties |
-| seti18next | ```options, i18next``` | sets i18next to equal options.i18next then deletes options.i18next |
+| seti18next | ```options``` | sets i18next to equal options.i18next then deletes options.i18next |
 | removeEmptyProps | none | Removes empty or undefined properties in the Rich Error |
 
 ## Examples
