@@ -244,11 +244,9 @@ class RichError{
     let self = this,
       key;
     for (key in self){
-      //if (self.hasOwnProperty(key)){
-        if (self[key] === undefined) {
-          delete self[key]
-        }
-      //}
+      if (self[key] === undefined) {
+        delete self[key]
+      }
     }
     return self
   }
