@@ -22,10 +22,6 @@ class Remie {
     return new RichError(err, options, remie)
   }
 
-// benefit of this being static? vvv
-// because create uses options set up before, static does not, uses only internal
-// sets default
-// change readme for this
   buildInternal(err, options = {}, remie = new Remie()) { // err must be RichError, Error, or locale
     options.internalOnly = true;
     return new RichError(err, options, remie);
