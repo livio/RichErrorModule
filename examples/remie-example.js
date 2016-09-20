@@ -3,8 +3,6 @@
  * ************************************************** */
 var Remie = require('../libs/index.js'),
   remie = new Remie(),
-  EventEmitter = require('events').EventEmitter,
-  inherits = require('util').inherits,
   myErr = new Error('Something went wrong'),
   options = {};
 options.internalMessage = 'I\'m the internal message for developer eyes only'
@@ -47,7 +45,6 @@ console.log("\n\n/* ******************** Rich Error Example ********************
 var exRich = remie.create(myErr, options)
 
 console.log(exRich)
-
 
 console.log("\n\n/* ******************** Rich Error With A Caught Error ******************** */\n");
 
