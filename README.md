@@ -1,5 +1,6 @@
 # REMIE (Rich Error Module Is Excellent)
 [![Build Status](https://img.shields.io/travis/livio/remie.svg)](https://travis-ci.org/livio/remie)
+[![codecov coverage](https://img.shields.io/codecov/c/github/livio/remie.svg)](https://codecov.io/gh/livio/remie)
 [![Version](https://img.shields.io/npm/v/remie.svg)](http://npm.im/remie)
 standardizing errors across micro-services
 
