@@ -63,5 +63,5 @@
     "report-coverage": "cat ./coverage/lcov.info | codecov",
     "test": "istanbul cover -x *.test.js _mocha -- -R spec test/index.test.js"
   },
-  "version": "0.0.9"
+  "version": "0.0.10"
 }
