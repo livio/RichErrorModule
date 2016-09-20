@@ -16,10 +16,10 @@ class RichError{
 
   build(err, options = {}, remie) { // if called without using Remie.create() then a Remie instance must be supplied
     // add space and comments here
-    // determine err type/instance in one line then add switch statement. Is that possible?
     if ( ! i18next) {
       let i18next = this.seti18next(options)
     }
+
     let self = this;
 
     if(err === undefined) {
@@ -30,64 +30,48 @@ class RichError{
       };
       return undefined
     }
-    let errHasType = (typeof err == 'string' || err instanceof String) ? 'string' : (typeof err != 'object') ? 'something else' : (err instanceof RichError) ? 'richError' : (err instanceof Error) ? 'error' : undefined
+
+    // determines 
+    let errHasType = ( err instanceof String ) ? 'string' : ( err instanceof RichError ) ? 'richError' : ( err instanceof Error ) ? 'error' : typeof err
+    
     switch(errHasType){
+      // if already a RichError, copy the error
       case 'richError':
-        console.log('RichError')
+
         self.set(err.toObject(err));
+
+        break;
+      // if a Node.js error, convert to RichError
       case 'error':
-        console.log('Error')
+
         self.set(this.buildFromSystemError(err, options));
+
+        break;
+      // if a string, attempt to lookup in i18next and create new RichError
       case 'string':
+
         if (i18next && i18next.exists(err)) { 
-            console.log('locale')
+
             self.set(this.buildFromLocale(err, options));// err is a locale
+
           } else {
-            console.log('string')
+
             self.set(this.buildFromString(err, options));
+
           };
-      case undefined:
-        console.log(undefined)
-        return undefined;
+
+          break;
+
       default:
-        console.log('Something else')
+
         self.set(err);
+
+        break;
+
     }
-    /*
-    if(err === undefined) {
-      if (options.internalMessage !== undefined) {
-        if (remie) {
-          remie.emit('internalError', options.internalMessage)
-        }
-      };
-      return undefined
-    } else {
-
-      // if already a rich error, copy the error
-      if (err instanceof RichError) {
-        self.set(err.toObject(err));
-      } else {
-
-        // if a Node.js error, convert to rich error
-        if (err instanceof Error) {
-          self.set(this.buildFromSystemError(err, options));
-
-        // if a string, attempt to lookup in i18next and create new rich error
-        } else if(typeof err === 'string' || err instanceof String) {
-          if (i18next && i18next.exists(err)) { 
-            self.set(this.buildFromLocale(err, options));// err is a locale
-          } else {
-            self.set(this.buildFromString(err, options));
-          }
-
-        // This is just an object or method, probably invalid
-        } else {
-          self.set(err);
-        }
-      }
-    }*/
     return this;
   };
+  
   buildFromSystemError(err = new Error(DEFAULT_ERROR_MESSAGE), options = {}) { // 'Internal server error!'
     let richErrorObject = {};
     richErrorObject.error = err;
@@ -118,7 +102,6 @@ class RichError{
   };
 
   buildFromString(errorString = DEFAULT_ERROR_MESSAGE, options = {}) { // 'Internal server error!'
-    console.log('buildFromString')
     let richErrorObject = {};
     richErrorObject.error = new Error(errorString);
     richErrorObject.error.code = (options.code) ? options.code.toLowerCase() : undefined;
