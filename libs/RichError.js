@@ -1,5 +1,5 @@
 let EventEmitter = require('events').EventEmitter;
-var i18next;
+//var i18next;
 const ERROR_LEVEL_FATAL = 'fatal',
   ERROR_LEVEL_ERROR = 'error',
   ERROR_LEVEL_WARN = 'warn',
@@ -16,9 +16,7 @@ class RichError{
 
   build(err, options = {}, remie) { // if called without using Remie.create() then a Remie instance must be supplied
     // add space and comments here
-    if ( ! i18next) {
-      let i18next = this.seti18next(options)
-    }
+    var i18next = this.seti18next(options)
 
     let self = this;
 
@@ -49,18 +47,15 @@ class RichError{
         break;
       // if a string, attempt to lookup in i18next and create new RichError
       case 'string':
-
         if (i18next && i18next.exists(err)) { 
+          self.set(this.buildFromLocale(err, options));// err is a locale
 
-            self.set(this.buildFromLocale(err, options));// err is a locale
+        } else {
+          self.set(this.buildFromString(err, options));
 
-          } else {
+        };
 
-            self.set(this.buildFromString(err, options));
-
-          };
-
-          break;
+        break;
 
       default:
 
@@ -126,7 +121,7 @@ class RichError{
     }
   };
 
-  guessStatusCodeOfLocale(locale) {
+  guessStatusCodeOfLocale(locale = DEFAULT_ERROR_LOCALE) {
     switch (locale) {
     //case "server.400.badRequest":
       //  return 400;
@@ -136,15 +131,13 @@ class RichError{
         return 404;
       case "server.400.unauthorized":
         return 401;
-      case undefined:
-        return 500;
       default:
         let categories = locale.split(".");
-        if (categories.length != 0) {
+        //if (categories.length != 0) {
           if (categories[0] == "server") {
             return Number(categories[1]);
           }
-        }
+       // }
         
         return 500;
     }
@@ -251,11 +244,11 @@ class RichError{
     let self = this,
       key;
     for (key in self){
-      if (self.hasOwnProperty(key)){
+      //if (self.hasOwnProperty(key)){
         if (self[key] === undefined) {
           delete self[key]
         }
-      }
+      //}
     }
     return self
   }
