@@ -60,8 +60,7 @@
     "url": "https://github.com/livio/remie"
   },
   "scripts": {
-    "test": "mocha test/index.test.js",
-    "test:watch": "mocha test/index.test.js -w"
+    "test": "istanbul cover -x *.test.js _mocha -- -R spec test/index.test.js"
   },
   "version": "0.0.9"
 }
