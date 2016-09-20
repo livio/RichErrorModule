@@ -96,6 +96,7 @@ describe('RichError', function(){
 		})
 		it('build calls correct methods and they run properly when sent correct parameters', function(){
 			expect(remie.create().build(undefined)).to.equal(undefined)
+			expect(remie.create().build(undefined, options)).to.equal(undefined)
 			expect(exRich).to.be.an.instanceof(RichError)
 			expect(remie.create().build(exRich)).to.include({
 				'internalOnly': false, 
@@ -153,6 +154,7 @@ describe('RichError', function(){
 				'referenceData': undefined, 
 				'statusCode': 400})
 				.and.to.have.property('options').to.equal(options) //calls buildFromSystemError
+			options.i18next = i18next
 			expect(remie.create().build('server.400.forbidden', options)).to.include({
 				'internalOnly': false, 
 				'internalMessage': 'I\'m the internal message for developer eyes only', 
@@ -204,6 +206,8 @@ describe('RichError', function(){
 			expect(defSystErr).to.have.property('options').and.to.be.empty
 		})
 		it('buildFromSystemError returns an object with expected properties of a Rich Error', function(){
+			let myError = new Error('Something went wrong')
+			myError.code = 'server.400.notFound'
 			let systemErr = remie.create().buildFromSystemError(myError, options)
 			expect(systemErr).to.be.an('object')
 			expect(systemErr).to.include({
@@ -215,7 +219,7 @@ describe('RichError', function(){
 				'statusCode': 400})
 			expect(systemErr).to.have.property('error')
 				.and.to.have.property('code')
-				.to.equal(undefined);
+				.to.equal('server.400.notfound');
 			expect(systemErr.error).to.have.property('message')
 				.and.to.equal('Something went wrong');
 			expect(systemErr.error).to.have.property('stack')
@@ -238,13 +242,14 @@ describe('RichError', function(){
 		})
 		it('buildFromLocale returns an object with expected properties of a Rich Error', function(){
 			let options = {};
-			options.internalMessage = "I'm the internal message for developer eyes only",
-			options.code = 'server.400.notFound',
-			options.i18next = require('i18next'),
+			options.internalMessage = "I'm the internal message for developer eyes only"
+			options.code = 'server.400.notFound'
+			options.i18next = require('i18next')
+			options.internalOnly = true
 			localeErr = remie.create().buildFromLocale('server.400.forbidden', options)
 			expect(localeErr).to.be.an('object')
 			expect(localeErr).to.include({
-				'internalOnly': false,
+				'internalOnly': true,
 				'internalMessage': "I'm the internal message for developer eyes only",
 				'level': 'error',
 				'messageData': undefined,
@@ -274,10 +279,16 @@ describe('RichError', function(){
 			expect(defStringErr.options).to.be.empty
 		})
 		it('buildFromString returns an object with expected properties of a Rich Error', function(){
+			let options = {};
+			options.internalMessage = "I'm the internal message for developer eyes only"
+			options.statusCode = 400
+			options.code = 'server.400.forbidden'
+			options.i18next = require('i18next')
+			options.internalOnly = true
 			let stringErr = remie.create().buildFromString('Something went wrong', options)
 			expect(stringErr).to.be.an('object')
 			expect(stringErr).to.include({
-				'internalOnly': false,
+				'internalOnly': true,
 				'internalMessage': "I'm the internal message for developer eyes only",
 				'level': 'error',
 				'messageData': undefined,
@@ -297,6 +308,7 @@ describe('RichError', function(){
 			expect(exRich.get('stack')).to.be.a('string')
 			expect(exRich.get('message')).to.be.a('string')
 			.and.to.equal('Something went wrong')
+			expect(remie.create().get('code')).to.equal(undefined)
 			expect(exRich.get()).to.equal(undefined)
 		})
 	})
@@ -307,6 +319,9 @@ describe('RichError', function(){
 			expect(guess('server.400.notFound')).to.equal(404)
 			expect(guess('server.400.unauthorized')).to.equal(401)
 			expect(guess('server.400.test')).to.equal(400)
+			expect(guess(undefined)).to.equal(500)
+			expect(guess('return 500')).to.equal(500)
+			expect(guess(' . ')).to.equal(500)
 		})
 	})
 	describe('set', function(){
@@ -345,7 +360,7 @@ describe('RichError', function(){
 			expect(objct).to.have.property('error').and.to.have.property('stack')
 			expect(objct).to.include({
 				'internalOnly': false,
-				'internalMessage': "I'm the internal message for developer eyes only",
+				'internalMessage': 'I\'m the internal message for developer eyes only',
 				'level': 'error',
 				'messageData': undefined,
 				'referenceData': undefined,
@@ -354,6 +369,12 @@ describe('RichError', function(){
 	})
 	describe('toResponseObject', function(){
 		it('toResponseObject returns an object without the internal properties of Rich Error', function() {
+			let options = {};
+			options.internalMessage = 'I\'m the internal message for developer eyes only'
+			options.code = 'server.400.forbidden'
+			options.statusCode = 400
+			options.messageData = 'Extra data included in the message'
+			options.referenceData = 'I\'m data that might have caused the error'
 			let exRich = remie.create('Something went wrong', options)
 			let resp = exRich.toResponseObject()
 			expect(remie.create().toResponseObject()).to.be.an('object')
@@ -361,13 +382,39 @@ describe('RichError', function(){
 			expect(exRich).to.have.property('internalMessage')
 			expect(exRich).to.have.property('internalOnly')
 			expect(resp).to.include({
+				'referenceData': 'I\'m data that might have caused the error',
 				'level': 'error', 
+				'messageData': 'Extra data included in the message',
 				'statusCode': 400})
 			expect(resp).to.not.have.property('internalOnly')
 			expect(resp).to.not.have.property('internalMessage')
 			expect(resp).to.have.property('error').to.include({
 				'message': 'Something went wrong', 
 				'code': 'server.400.forbidden'})
+			expect(resp.error).to.have.property('code')
+		})
+		it('toResponseObject returns undefined when internalOnly is true on RichError or false on options', function(){
+			let options = {};
+			options.internalOnly = true
+			let exRich = remie.create('Something went wrong', options),
+				resp = exRich.toResponseObject();
+			expect(resp).to.equal(undefined)
+			options.internalOnly = false
+			resp = exRich.toResponseObject(options)
+			expect(resp).to.equal(undefined)
+		})
+		it('toResponseObject returns empty error property when options.error is set to false or self.error is undefined', function(){
+			let options = {};
+			options.error = {}
+			options.error.message = false
+			options.error.code = false
+			options.error.stack = false
+			let exRich = remie.create('Something went wrong', options),
+				resp = exRich.toResponseObject(options)
+			expect(resp.error).to.be.empty
+			exRich = remie.create()
+			resp = exRich.toResponseObject()
+			expect(resp.error).to.be.empty
 		})
 	})
 	describe('seti18next', function(){
