@@ -37,8 +37,9 @@ RichError {
 ## Parameters
 | Parameter | Type | Default | Description | Required |
 |-----------|------|---------|-------------|----------|
-| err | Object | ```undefined``` | Node.js error that ocurred | ```yes``` |
+| err | Object, String | ```undefined``` | Node.js error that ocurred | ```yes``` |
 | err.code | String | ```undefined``` | Unique string "server.400.error" | ```no``` |
+| err.message | String | ```undefined``` | Readable description of the error | ```no``` |
 | err.stack | String | ```undefined``` | String stack trace | ```no``` |
 | locale | String | ```server.500.generic``` | String used to determine the user's language | ```no``` |
 | options | Object | ```{}``` | Overrides default behaviors | ```no``` |
