@@ -1,5 +1,4 @@
 let EventEmitter = require('events').EventEmitter;
-//var i18next;
 const ERROR_LEVEL_FATAL = 'fatal',
   ERROR_LEVEL_ERROR = 'error',
   ERROR_LEVEL_WARN = 'warn',
@@ -15,7 +14,7 @@ class RichError{
   };
 
   build(err, options = {}, remie) { // if called without using Remie.create() then a Remie instance must be supplied
-    // add space and comments here
+    
     var i18next = this.seti18next(options)
 
     let self = this;
@@ -29,7 +28,7 @@ class RichError{
       return undefined
     }
 
-    // determines 
+    // determines what err is then calls the correct method
     let errHasType = ( err instanceof String ) ? 'string' : ( err instanceof RichError ) ? 'richError' : ( err instanceof Error ) ? 'error' : typeof err
     
     switch(errHasType){
@@ -67,13 +66,13 @@ class RichError{
     return this;
   };
   
-  buildFromSystemError(err = new Error(DEFAULT_ERROR_MESSAGE), options = {}) { // 'Internal server error!'
+  buildFromSystemError(err = new Error(DEFAULT_ERROR_MESSAGE), options = {}) {
     let richErrorObject = {};
     richErrorObject.error = err;
     richErrorObject.error.code = (err.code) ? err.code.toLowerCase() : undefined;
     richErrorObject.internalOnly = (options.internalOnly === true) ? true : false;
     richErrorObject.internalMessage = options.internalMessage || undefined;
-    richErrorObject.level = options.level || ERROR_LEVEL_ERROR; // 'error'
+    richErrorObject.level = options.level || ERROR_LEVEL_ERROR;
     richErrorObject.messageData = options.messageData || undefined;
     richErrorObject.options = options;
     richErrorObject.referenceData = options.referenceData || undefined;
@@ -81,14 +80,14 @@ class RichError{
     return richErrorObject;
   };
 
-  buildFromLocale(locale = DEFAULT_ERROR_LOCALE, options = {}) { // 'server.500.generic'
+  buildFromLocale(locale = DEFAULT_ERROR_LOCALE, options = {}) {
     let richErrorObject = {};
     i18next = this.seti18next(options)
     richErrorObject.error = (i18next) ? new Error(i18next.t(locale, options.i18next)) : new Error(locale); // options.i18next can not be i18next because of this line. It would mean calling translate on itself
     richErrorObject.error.code = locale.toLowerCase();
     richErrorObject.internalOnly = (options.internalOnly === true) ? true : false;
     richErrorObject.internalMessage = options.internalMessage || undefined;
-    richErrorObject.level = options.level || ERROR_LEVEL_ERROR; // 'error'
+    richErrorObject.level = options.level || ERROR_LEVEL_ERROR;
     richErrorObject.messageData = options.i18next;
     richErrorObject.options = options;
     richErrorObject.referenceData = options.referenceData || undefined;
@@ -96,13 +95,13 @@ class RichError{
     return richErrorObject;
   };
 
-  buildFromString(errorString = DEFAULT_ERROR_MESSAGE, options = {}) { // 'Internal server error!'
+  buildFromString(errorString = DEFAULT_ERROR_MESSAGE, options = {}) {
     let richErrorObject = {};
     richErrorObject.error = new Error(errorString);
     richErrorObject.error.code = (options.code) ? options.code.toLowerCase() : undefined;
     richErrorObject.internalOnly = (options.internalOnly === true) ? true : false;
     richErrorObject.internalMessage = options.internalMessage || undefined;
-    richErrorObject.level = options.level || ERROR_LEVEL_ERROR; // 'error'
+    richErrorObject.level = options.level || ERROR_LEVEL_ERROR;
     richErrorObject.messageData = options.messageData || undefined;
     richErrorObject.options = options;
     richErrorObject.referenceData = options.referenceData || undefined;
@@ -133,11 +132,9 @@ class RichError{
         return 401;
       default:
         let categories = locale.split(".");
-        //if (categories.length != 0) {
-          if (categories[0] == "server") {
-            return Number(categories[1]);
-          }
-       // }
+        if (categories[0] == "server") {
+          return Number(categories[1]);
+        }
         
         return 500;
     }
@@ -179,7 +176,7 @@ class RichError{
 
   toObject() {
     let self = this
-    return { //possibly need to restructure to work when one or more values is not given
+    return {
       error: {
         code: self.error.code,
         message: self.error.message,
@@ -195,8 +192,7 @@ class RichError{
     };
   };
 
-  toResponseObject(options = {}) { // Is this supposed to be what is returned to the user? Yes
-    //change name
+  toResponseObject(options = {}) {
     let self = this,
       obj = {}; 
     if(self.internalOnly !== true && options.internalOnly !== false) { 
@@ -210,7 +206,7 @@ class RichError{
           error.code = self.error.code;
         }
         if (self.error.stack && errorOptions.stack !== false) {
-          error.stack = self.error.stack; //causes stack to be put on one line when logging entire RichError but not when logging stack only 
+          error.stack = self.error.stack;
         }
         obj.error = error;
       }
@@ -241,13 +237,12 @@ class RichError{
     }
   }
   removeEmptyProps() {
-    let self = this,
-      key;
-    for (key in self){
-      if (self[key] === undefined) {
-        delete self[key]
-      }
-    }
+    let self = this;
+    Object.keys(this).forEach(function(key,index){
+        if (self[key] === undefined) {
+          delete self[key]
+        }
+    })
     return self
   }
 };
