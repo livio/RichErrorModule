@@ -446,6 +446,7 @@ describe('RichError', function(){
 				'statusCode': 400})
 			expect(exRich.removeEmptyProps()).to.not.have.property('referenceData')
 			expect(exRich.removeEmptyProps()).to.not.have.property('messageData')
+			expect(exRich.removeEmptyProps()).to.have.property('error')
 		})
 	})
 	/*it('set does not need to be sent a Rich Error to work', function(){
