@@ -1,0 +1,37 @@
+{
+  "name": "remie-examples",
+  "author": {
+    "name": "Livio"
+  },
+  "bugs": {
+    "url": "https://github.com/livio/remie/issues"
+  },
+  "contributors": [
+    {
+      "name": "Scott Smereka",
+      "email": "scott@livio.io"
+    },
+    {
+      "name": "Nick Reno",
+      "email": "nick@livio.io"
+    }
+  ],
+  "version": "0.0.1",
+  "description": "A group of examples of how to use Remie.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "licenses": [
+    {
+      "url": "https://github.com/livio/remie/blob/master/license"
+    }
+  ],
+  "dependencies": {
+    "i18next": "^3.4.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/livio/remie"
+  }
+}
