@@ -3,11 +3,13 @@
 [![codecov coverage](https://img.shields.io/codecov/c/github/livio/remie.svg)](https://codecov.io/gh/livio/remie)
 [![Version](https://img.shields.io/npm/v/remie.svg)](http://npm.im/remie)
 
-Encapsulates additional information about an error that occurred in a standardized Remie error object.
+Encapsulates additional information about an error that occurred in a standardized error object called a ```Remie error```.
 
 ## Installation
+Install and save the Remie npm module to the package.json.
+
 ```bash
-$ npm install remie
+$ npm install --save remie
 ```
 
 ## Usage
@@ -37,11 +39,14 @@ try {
 ```
 
 The error can be converted to an object to be passed between internal services as JSON.
+
 ```javascript
 console.log(error.toObject());
 ```
 
-```bash
+The above command produces the following console logs:
+
+```JSON
 {
   error: {
 	  code: undefined,
@@ -59,7 +64,7 @@ console.log(error.toObject());
 }
 ```
 
-and then used to create a Remie error instance again.
+The same object can then used to create a Remie error instance again.
 
 ```javascript
 let myRemieError = remie.create(error);
@@ -70,6 +75,9 @@ Or, you can sanitize the error and send it to a client.
 ```javascript
 console.log(error.sanitize());
 ```
+
+The above command produces the following console logs:
+
 ```bash
 {
   error: {
@@ -85,6 +93,13 @@ console.log(error.sanitize());
 ```
 
 # Remie
+
+  * [Examples](#examples)
+  * [Events](#events)
+  * [Error Levels](#error-levels)
+  * [Methods](#methods)
+  * [Options](#options)
+  * [Tests](#tests)
 
 ## Methods
 Remie instance methods.
@@ -211,15 +226,42 @@ let error2 = remie.copy(error1);
 ```
 
 ### set
+Set an option in the Remie instance.  Provide the ```option``` name and new ```value``` as parameters.  See available [Remie options](#options).
+
+```javascript
+remie.set(option, value);
+```
+
+| Parameters | Type | Required | Default | Description |
+| -----------|------|----------|---------|-------------|
+| option | ```String``` | Yes | ```undefined``` | The name of the option to set. |
+| value | ```Varies``` | Yes | ```undefined``` | The option's new value. |
+
+```javascript
+remie.set("defaultErrorMessage", "An internal error has occurred.");
+```
+
 
 ### get
+Get an option in the Remie instance by providing the ```option``` name as a parameter.  See available [Remie options](#options).
 
+```javascript
+remie.get(option);
+```
 
-## Events
+| Parameters | Type | Required | Default | Description |
+| -----------|------|----------|---------|-------------|
+| option | ```String``` | Yes | ```undefined``` | The name of the option to set. |
+
+```javascript
+let defaultErrorMessage = remie.get("defaultErrorMessage");
+```
+
+## Remie Events
 
 ### ON_CREATE_INTERNAL_MESSAGE
 
-## Error Levels
+## Remie Error Levels
 
 ## Configure
 
