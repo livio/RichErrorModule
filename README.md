@@ -92,16 +92,22 @@ The above command produces the following console logs:
 }
 ```
 
-# Remie
+# Table of Contents
 
   * [Examples](#examples)
-  * [Events](#events)
-  * [Error Levels](#error-levels)
-  * [Methods](#methods)
-  * [Options](#options)
+  * [Remie](#remie)
+    * [Configure Remie](#configure-remie)
+    * [Error Levels](#error-levels)
+    * [Events](#events)
+    * [Remie Methods](#remie-methods)
+  * [Remie Error](#remie-error)
+    * [Error Methods](#remie-error-methods)
   * [Tests](#tests)
+  
 
-## Methods
+# Remie
+
+## Remie Methods
 Remie instance methods.
 
 ### Create
@@ -293,7 +299,7 @@ Remie includes several standard error levels that can be used to categorizing or
 | ERROR_LEVEL_DEBUG | ```"debug"``` | Anything else, i.e. too verbose to be included in "info" level. |
 | ERROR_LEVEL_TRACE | ```"trace"``` | Logging from external libraries used by your app or very detailed application logging. |
 
-## Options
+## Configure Remie
 
 | Option | Type | Default | Description |
 | -------|------|---------|-------------|
