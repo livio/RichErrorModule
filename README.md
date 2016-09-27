@@ -108,7 +108,17 @@ The above command produces the following console logs:
 # Remie
 
 ## Remie Methods
-Remie instance methods.
+The Remie instance is used to create Remie errors with a standard set of configurations.  The following Remie methods are available.
+
+  * [Copy](#copy)
+  * [Create](#create)
+    * [Create from String](#create-from-string)
+    * [Create from Locale](#create-from-locale)
+    * [Create from Node.js Error](#create-from-node.js-error)
+    * [Create from Remie Error](#create-from-remie-error)
+  * [Create Internal](#create-internal)
+  * [Get](#get)
+  * [Set](#set)
 
 ### Create
 Builds a new Remie error instance.  You can build it from a ```string```, ```i18next locale```, ```Node.js error```, or an existing ```Remie error``` object.
@@ -184,7 +194,6 @@ let error2 = remie.create(error1, {
 });
 ```
 
-
 ### createInternal
 Same as create only the error will be marked as internal only by setting the ```internalOnly``` attribute to ```true```.
 
@@ -247,7 +256,6 @@ remie.set(option, value);
 remie.set("defaultErrorMessage", "An internal error has occurred.");
 ```
 
-
 ### get
 Get an option in the Remie instance by providing the ```option``` name as a parameter.  See available [Remie options](#options).
 
@@ -300,6 +308,7 @@ Remie includes several standard error levels that can be used to categorizing or
 | ERROR_LEVEL_TRACE | ```"trace"``` | Logging from external libraries used by your app or very detailed application logging. |
 
 ## Configure Remie
+You can configure the Remie instance at anytime using the following attributes:
 
 | Option | Type | Default | Description |
 | -------|------|---------|-------------|
@@ -308,8 +317,23 @@ Remie includes several standard error levels that can be used to categorizing or
 | defaultErrorStatusCode | ```Number``` |  ```500``` | Default Remie error status code used when an error status code is not provided. |
 | i18next | ```Object``` |  ```undefined``` | Instance of i18next used for translation of locales. |
 
+To configure a Remie instance while being created pass values into the constructor as an object.
+
+```
+let remie = new Remie({
+    defaultErrorMessage: "Oh crap!",
+    defaultErrorStatusCode: 200       // Everything is ok, it's fine, really... no problems.
+});
+```
+
+You can also change a configuration at anytime using the [set](#set) method.
+```
+remie.set("defaultErrorStatusCode", 500);  // Nvm, it's bad, really bad.
+```
+
 # Remie Error
 
+## Remie Error Methods
 
 ## Attributes
 
