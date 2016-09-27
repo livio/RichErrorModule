@@ -46,7 +46,7 @@ console.log(error.toObject());
 
 The above command produces the following console logs:
 
-```JSON
+```javascript
 {
   error: {
 	  code: undefined,
@@ -257,13 +257,50 @@ remie.get(option);
 let defaultErrorMessage = remie.get("defaultErrorMessage");
 ```
 
-## Remie Events
+## Events
+Events are emitted by Remie using the standard Node.js EventEmitter.  You can listen for these events.
+
+```javascript
+let Remie = require('remie');
+
+let remie = new Remie();
+
+remie.on("MyEventHere", function() { /* Do Something Here */ });
+```
 
 ### ON_CREATE_INTERNAL_MESSAGE
+Called when an internal message is added to a Remie error instance.
 
-## Remie Error Levels
+```javascript
+let Remie = require('remie');
 
-## Configure
+let remie = new Remie();
+
+remie.on(Remie.ON_CREATE_INTERNAL_MESSAGE, function(error, options) {
+  console.log("[Internal Message]: " + error.internalMessage);
+});
+```
+
+## Error Levels
+Remie includes several standard error levels that can be used to categorizing or logging errors.  Remie uses the same error levels as [node-bunyan](https://github.com/trentm/node-bunyan#levels). 
+
+| Level | String | Description |
+| ------|--------|-------------|
+| ERROR_LEVEL_FATAL | ```"fatal"``` | The service/app is going to stop or become unusable now. An operator should definitely look into this soon. |
+| ERROR_LEVEL_ERROR | ```"error"``` | Fatal for a particular request, but the service/app continues servicing other requests. An operator should look at this soon(ish). |
+| ERROR_LEVEL_WARN | ```"warn"``` | A note on something that should probably be looked at by an operator eventually. |
+| ERROR_LEVEL_INFO | ```"info"``` | Detail on regular operation. |
+| ERROR_LEVEL_DEBUG | ```"debug"``` | Anything else, i.e. too verbose to be included in "info" level. |
+| ERROR_LEVEL_TRACE | ```"trace"``` | Logging from external libraries used by your app or very detailed application logging. |
+
+## Options
+
+| Option | Type | Default | Description |
+| -------|------|---------|-------------|
+| defaultErrorMessage | ```String``` |  ```"Internal server error!"``` | Default Remie error message used when an error message is not provided. |
+| defaultErrorLocale | ```String``` |  ```"server.500.generic"``` | Default Remie error locale for i18next used when an error locale is required, but not provided. |
+| defaultErrorStatusCode | ```Number``` |  ```500``` | Default Remie error status code used when an error status code is not provided. |
+| i18next | ```Object``` |  ```undefined``` | Instance of i18next used for translation of locales. |
 
 # Remie Error
 
