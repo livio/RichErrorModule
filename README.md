@@ -309,20 +309,20 @@ Remie includes several standard error levels that can be used to categorizing or
 
 You can access the error levels statically using the Remie npm module instance.
 
-```
+```javascript
 let Remie = require('remie');
 
 console.log(Remie.ERROR_LEVEL_FATAL);
 ```
 
-> Note:  You cannot access these on a remie instance, aka not statically.
+> Note:  You cannot access these on a remie instance, aka non-statically.
 
-```
+```javascript
 let Remie = require('remie');
 let remie = new Remie();
 
-Remie.ERROR_LEVEL_FATAL  // GOOD!  Works! WOW!
-remie.ERROR_LEVEL_FATAL  // BAD!  NO WORK! WOW!
+Remie.ERROR_LEVEL_FATAL  // GOOD!  Works!    WOW!
+remie.ERROR_LEVEL_FATAL  // BAD!   NO WORK!  WOW!
 ```
 
 ## Configure Remie
@@ -337,7 +337,7 @@ You can configure the Remie instance at anytime using the following attributes:
 
 To configure a Remie instance while being created pass values into the constructor as an object.
 
-```
+```javascript
 let remie = new Remie({
     defaultErrorMessage: "Oh crap!",
     defaultErrorStatusCode: 200       // Everything is ok, it's fine, really... no problems.
@@ -345,7 +345,7 @@ let remie = new Remie({
 ```
 
 You can also change a configuration at anytime using the [set](#set) method.
-```
+```javascript
 remie.set("defaultErrorStatusCode", 500);  // Nvm, it's bad, really bad.
 ```
 
@@ -380,20 +380,49 @@ remie.set("defaultErrorStatusCode", 500);  // Nvm, it's bad, really bad.
 ### set
 
 # Examples
-First, clone the Remie repo and install any dependencies:
-```bash
-git clone https://github.com/livio/remie.git
-cd remie/examples
-npm install
-```
-You can now look over the examples and run each file using the ```node``` command.  For example:
-```bash
-node basic.js
-```
+A series of examples exist to help you understand how to use remie.  They are all located in the [examples](https://github.com/livio/remie/tree/develop/examples) folder.  You can follow these steps to use and play with the examples.
+  
+  1. Download or clone the repo.
+
+    ```bash
+    git clone https://github.com/livio/remie.git
+    ```
+    
+  2. Navigate to the examples folder.
+  
+    ```bash
+    cd remie/examples
+    ```
+    
+  3. Install dependencies
+   
+   ```bash
+   npm install
+   ```
+  
+  4. Run any example using ```node nameOfExampleFile.js```
+  
+  ```bash
+  node basic.js
+  ```
 
 # Tests
-To run the tests, start by installing dependencies, then run ```npm test```:
-```bash
-npm install
-npm test
-```
+Remie includes tests using the mocha framework.  Run and ensure these tests pass before submitting code to a stable branch or finished pull-request.
+  
+  1. Download or clone the repo.
+  
+      ```bash
+      git clone https://github.com/livio/remie.git
+      ```
+      
+    2. Install dependencies
+    
+      ```bash
+      npm install
+      ```
+      
+    3. Run the tests
+     
+     ```bash
+     npm test
+     ```
