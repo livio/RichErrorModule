@@ -8,7 +8,8 @@ var i18next = require('i18next'),
   RichError;
 
 const DEFAULT_ERROR_MESSAGE = "Internal server error!",
-  DEFAULT_ERROR_LOCALE = "server.500.generic";
+  DEFAULT_ERROR_LOCALE = "server.500.generic",
+  DEFAULT_ERROR_STATUS_CODE = 500;
 
 
 /* ************************************************** *
@@ -31,8 +32,8 @@ class Remie {
     return new RichError(err, options, this);
   };
 
-  copy(richError = {}) {
-    return new RichError(richError.toObject());
+  copy(richError = {}, options) {
+    return new RichError(richError.toObject(), options, this);
   };
 
   create(err, options = {}) {
@@ -53,6 +54,7 @@ class Remie {
     }
     this.defaultErrorMessage = options.defaultErrorMessage || DEFAULT_ERROR_MESSAGE;
     this.defaultErrorLocale = options.defaultErrorLocale || DEFAULT_ERROR_LOCALE;
+    this.defaultErrorStatusCode = options.defaultErrorStatusCode || DEFAULT_ERROR_STATUS_CODE;
   }
 
   static get ERROR_LEVEL_FATAL() { return "fatal" }

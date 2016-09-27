@@ -110,7 +110,7 @@ class RichError{
 
     let obj = {};
     obj.error = new Error(errorString);
-    obj.error.code = (options.code) ? options.code.toLowerCase() : undefined;
+    obj.error.code = (options.error && options.error.code) ? options.code.toLowerCase() : undefined;
     return obj;
   };
 
@@ -242,7 +242,7 @@ class RichError{
 
     return obj;
   }
-  
+
   sanitize(options = {}) {
     let self = this,
       obj = {};

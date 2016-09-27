@@ -2,7 +2,8 @@
 [![Build Status](https://img.shields.io/travis/livio/remie.svg)](https://travis-ci.org/livio/remie)
 [![codecov coverage](https://img.shields.io/codecov/c/github/livio/remie.svg)](https://codecov.io/gh/livio/remie)
 [![Version](https://img.shields.io/npm/v/remie.svg)](http://npm.im/remie)
-standardizing errors across micro-services
+
+Encapsulates additional information about an error that occurred in a standardized Remie error object.
 
 ## Installation
 ```bash
@@ -10,7 +11,7 @@ $ npm install remie
 ```
 
 ## Usage
-Create and configure an instance of Remie.  Then create a new Remie error from a system error.
+Create and configure an instance of Remie.  Then create a new Remie error from a Node.js system error.
 ```javascript
 // Require the Remie module.
 let Remie = require('remie');
@@ -25,7 +26,6 @@ let myVariable,
 try {
   myVariable.myMethod();
 } catch(e) {
-
   // Create a Remie error to extend the information provided in the error object.
   error = remie.create(e, {
     level: Remie.ERROR_LEVEL_FATAL,  // Give it an error level e.g. warning or fatal
@@ -89,14 +89,126 @@ console.log(error.sanitize());
 ## Methods
 Remie instance methods.
 
-### create
-Builds a new RichError instance
+### Create
+Builds a new Remie error instance.  You can build it from a ```string```, ```i18next locale```, ```Node.js error```, or an existing ```Remie error``` object.
+
+```javascript
+remie.create(error, options);
+```
+
+| Parameters | Type | Required | Default | Description |
+| -----------|------|----------|---------|-------------|
+| error                   | ```String``` or ```Object``` | No | ```remie.defaultErrorMessage``` | The error that occurred. |
+| options                 | ```Object```  | No | ```{}``` | Configurations for the error object being built. |
+| options.error.code      | ```String```  | No | ```undefined``` | A unique value to reference the type of error that occurred. |
+| options.internalMessage | ```String```  | No | ```undefined``` | Additional message to only display internally. |
+| options.internalOnly    | ```Boolean``` | No | ```false``` | When true, error should only be displayed internally |
+| options.level           | ```String```  | No | ```error``` | Error level (e.g. ```error```, ```fatal```, ```warn```) |
+| options.messageData     | ```Object```  | No | ```undefined``` | Parameter data included in the error message. |
+| options.referenceData   | ```Object```  | No | ```undefined``` | Data that may have caused the error. |
+| options.statusCode      | ```Number```  | No | ```500``` | HTTP status code (e.g. 200, 400, 500) |
+
+#### Create from String
+Create a new Remie error object with a string as the ```error``` parameter.  Pass along any additional configurations in the ```options``` object parameter.
+
+```javascript
+let error = remie.create("Something went horribly wrong", {  level: Remie.ERROR_LEVEL_FATAL  });
+```
+
+#### Create from Locale
+Create a new Remie error object with an i18next string locale as the ```error``` parameter.  Pass along any additional configurations in the ```options``` object parameter.
+
+> Note:  i18next must be configured and included in the ```remie``` instance to handle the translation lookup.
+
+```javascript
+// Require and configure i18next.
+let remie = new Remie({ i18next: i18next });
+
+let error = remie.create("server.400.notFound", {  
+  error: {
+    code: "server.400.notFound"
+  },
+  "messageData": { page: "http://my.domain.com/this/page/doesnt/exist"}
+});
+```
+
+#### Create from Node.js Error
+Create a new Remie error object from an existing Node.js error as a parameter.  Pass along any additional configurations in the ```options``` object parameter.
+
+```javascript
+let myVariable = undefined;
+
+// Let's make an error occur.
+try {
+  myVariable.myMethod();
+} catch(e) {
+  // Create a Remie error to extend the information provided in the error object.
+  error = remie.create(e, {
+    referenceData: {                 // Hint at what data could have caused the error.
+      myVariable: myVariable
+    }
+  });
+}
+```
+
+#### Create from Remie Error
+Create a new Remie error object from an existing Remie error object as a parameter.  Pass along any additional configurations in the ```options``` object parameter.
+
+```javascript
+// Require and configure i18next.
+let error1 = remie.create("something is wrong.");
+
+let error2 = remie.create(error1, {
+  internalMessage: "This is a copy of error1"
+});
+```
+
 
 ### createInternal
-Makes a copy of a RichError that has the same necessary properties
+Same as create only the error will be marked as internal only by setting the ```internalOnly``` attribute to ```true```.
+
+```javascript
+remie.createInternal(error, options);
+```
+| Parameters | Type | Required | Default | Description |
+| -----------|------|----------|---------|-------------|
+| error                   | ```String``` or ```Object``` | No | ```remie.defaultErrorMessage``` | The error that occurred. |
+| options                 | ```Object```  | No | ```{}``` | Configurations for the error object being built. |
+| options.error.code      | ```String```  | No | ```undefined``` | A unique value to reference the type of error that occurred. |
+| options.internalMessage | ```String```  | No | ```undefined``` | Additional message to only display internally. |
+| options.internalOnly    | ```Boolean``` | No | ```false``` | When true, error should only be displayed internally |
+| options.level           | ```String```  | No | ```error``` | Error level (e.g. ```error```, ```fatal```, ```warn```) |
+| options.messageData     | ```Object```  | No | ```undefined``` | Parameter data included in the error message. |
+| options.referenceData   | ```Object```  | No | ```undefined``` | Data that may have caused the error. |
+| options.statusCode      | ```Number```  | No | ```500``` | HTTP status code (e.g. 200, 400, 500) |
+
+```javascript
+let error = remie.createInternal("Something went horribly wrong", {  level: Remie.ERROR_LEVEL_FATAL  });
+```
 
 ### copy
-Use this when dealing with an internal error
+Make a copy of an existing Remie error instance.
+
+```javascript
+remie.copy(error, options);
+```
+
+| Parameters | Type | Required | Default | Description |
+| -----------|------|----------|---------|-------------|
+| error                   | ```Object``` | No | ```{}``` | The Remie error instance to copy. |
+| options                 | ```Object```  | No | ```{}``` | Configurations for the error object being built. |
+| options.error.code      | ```String```  | No | ```undefined``` | A unique value to reference the type of error that occurred. |
+| options.internalMessage | ```String```  | No | ```undefined``` | Additional message to only display internally. |
+| options.internalOnly    | ```Boolean``` | No | ```false``` | When true, error should only be displayed internally |
+| options.level           | ```String```  | No | ```error``` | Error level (e.g. ```error```, ```fatal```, ```warn```) |
+| options.messageData     | ```Object```  | No | ```undefined``` | Parameter data included in the error message. |
+| options.referenceData   | ```Object```  | No | ```undefined``` | Data that may have caused the error. |
+| options.statusCode      | ```Number```  | No | ```500``` | HTTP status code (e.g. 200, 400, 500) |
+
+```javascript
+let error1 = remie.create("this is an error");
+let error2 = remie.copy(error1);
+```
 
 ### set
 
