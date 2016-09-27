@@ -411,18 +411,18 @@ Remie includes tests using the mocha framework.  Run and ensure these tests pass
   
   1. Download or clone the repo.
   
-      ```bash
-      git clone https://github.com/livio/remie.git
-      ```
-      
-    2. Install dependencies
-    
-      ```bash
-      npm install
-      ```
-      
-    3. Run the tests
-     
-     ```bash
-     npm test
-     ```
+  ```bash
+  git clone https://github.com/livio/remie.git
+  ```
+  
+  2. Install dependencies
+
+  ```bash
+  npm install
+  ```
+  
+  3. Run the tests
+ 
+  ```bash
+  npm test
+  ```
