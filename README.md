@@ -114,7 +114,7 @@ The Remie instance is used to create Remie errors with a standard set of configu
   * [Create](#create)
     * [Create from String](#create-from-string)
     * [Create from Locale](#create-from-locale)
-    * [Create from Node.js Error](#create-from-node.js-error)
+    * [Create from Node.js Error](#create-from-nodejs-error)
     * [Create from Remie Error](#create-from-remie-error)
   * [Create Internal](#create-internal)
   * [Get](#get)
@@ -194,7 +194,7 @@ let error2 = remie.create(error1, {
 });
 ```
 
-### createInternal
+### Create Internal
 Same as create only the error will be marked as internal only by setting the ```internalOnly``` attribute to ```true```.
 
 ```javascript
@@ -241,7 +241,7 @@ let error2 = remie.copy(error1);
 ```
 
 ### set
-Set an option in the Remie instance.  Provide the ```option``` name and new ```value``` as parameters.  See available [Remie options](#options).
+Set an option in the Remie instance.  Provide the ```option``` name and new ```value``` as parameters.  See available [Remie configurations](#configure-remie).
 
 ```javascript
 remie.set(option, value);
@@ -257,7 +257,7 @@ remie.set("defaultErrorMessage", "An internal error has occurred.");
 ```
 
 ### get
-Get an option in the Remie instance by providing the ```option``` name as a parameter.  See available [Remie options](#options).
+Get an option in the Remie instance by providing the ```option``` name as a parameter.  See available [Remie configurations](#configure-remie).
 
 ```javascript
 remie.get(option);
@@ -306,6 +306,24 @@ Remie includes several standard error levels that can be used to categorizing or
 | ERROR_LEVEL_INFO | ```"info"``` | Detail on regular operation. |
 | ERROR_LEVEL_DEBUG | ```"debug"``` | Anything else, i.e. too verbose to be included in "info" level. |
 | ERROR_LEVEL_TRACE | ```"trace"``` | Logging from external libraries used by your app or very detailed application logging. |
+
+You can access the error levels statically using the Remie npm module instance.
+
+```
+let Remie = require('remie');
+
+console.log(Remie.ERROR_LEVEL_FATAL);
+```
+
+> Note:  You cannot access these on a remie instance, aka not statically.
+
+```
+let Remie = require('remie');
+let remie = new Remie();
+
+Remie.ERROR_LEVEL_FATAL  // GOOD!  Works! WOW!
+remie.ERROR_LEVEL_FATAL  // BAD!  NO WORK! WOW!
+```
 
 ## Configure Remie
 You can configure the Remie instance at anytime using the following attributes:
