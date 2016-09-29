@@ -265,7 +265,7 @@ remie.get(option);
 
 | Parameters | Type | Required | Default | Description |
 | -----------|------|----------|---------|-------------|
-| option | ```String``` | Yes | ```undefined``` | The name of the option to set. |
+| option | ```String``` | Yes | ```undefined``` | The name of the option to get. |
 
 ```javascript
 let defaultErrorMessage = remie.get("defaultErrorMessage");
@@ -351,33 +351,116 @@ remie.set("defaultErrorStatusCode", 500);  // Nvm, it's bad, really bad.
 
 # Remie Error
 
+  * [Attributes](#remie-error-attributes)
+  * [Methods](#remie-error-methods)
+
+## Remie Error Attributes
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| error | ```Object``` | ```undefined``` | Contains information about the error that occurred. |
+| error.code | String | ```undefined``` | A unique string that can programmatically identify the type of error that occurred. |
+| error.message | String | ```undefined``` | A user friendly description of the error that occurred. |
+| error.stack | String | ```undefined``` | A stack trace for the error that occurred. |
+| internalOnly | Boolean | ```false``` | When true, denotes the error is for the developer's eyes only. |
+| internalMessage | String | ```undefined``` | A special message that should not be shown to a user or client. |
+| level | String | ```error``` | Indicates the level of error that occurred.  (e.g. warning, info, error, trace) |
+| messageData | String | ```undefined``` | Extra data that was included in the error message.
+| referenceData | Object | ```undefined``` | Data that may have caused or is related to the error |
+| statusCode | Number | ```500``` | HTTP status code. (e.g. 200, 400, 500) |
+
+### i18next Translations
+When using i18next the locale will be placed in the ```error.code``` and ```options.messageData``` will contain any parameter keys/values included in the locale.
+
 ## Remie Error Methods
 
-## Attributes
+  * [build](#build)
+  * [get](#error-get)
+  * [set](#error-set)
+  * [sanitize](#sanitize)
+  * [toObject](#toObject)
 
-| Parameter | Type | Default | Description | Required |
-|-----------|------|---------|-------------|----------|
-| err | Object, String | ```undefined``` | Node.js error that ocurred | ```yes``` |
-| err.code | String | ```undefined``` | Unique string "server.400.error" | ```no``` |
-| err.message | String | ```undefined``` | Readable description of the error | ```no``` |
-| err.stack | String | ```undefined``` | String stack trace | ```no``` |
-| locale | String | ```server.500.generic``` | String used to determine the user's language | ```no``` |
-| options | Object | ```{}``` | Overrides default behaviors | ```no``` |
-| options.internalOnly | Boolean | ```false``` | Specifies an error for the developer only | ```no``` |
-| options.internalMessage | String | ```undefined``` | String message for developer | ```no``` |
-| options.level | String | ```error``` | String error level (e.g. warning, info, error, trace) | ```no``` |
-| options.messageData | String | ```undefined``` | Extra data included in the message | ```no``` |
-| options.referenceData | String | ```undefined``` | Data that may have caused the error | ```no``` |
-| options.statusCode | Number | ```500``` | HTTP status code (e.g. 200, 400, 500) | ```no``` |
-| options.i18next | Module | ```undefined``` | [i18next](http://i18next.com/docs/) | ```no```|
+### Build
+Builds the current Remie error instance.  You can build it from a ```string```, ```i18next locale```, ```Node.js error```, or an existing ```Remie error``` object.  The Remie [Create](#create) method calls this method internally, see the create method documentation for more details.
+ 
+ ```javascript
+ error.build(error, options, remie)
+ ```
+ 
+ | Parameters | Type | Required | Default | Description |
+ | -----------|------|----------|---------|-------------|
+ | error                   | ```String``` or ```Object``` | No | ```remie.defaultErrorMessage``` | The error that occurred. |
+ | options                 | ```Object```  | No | ```{}``` | Configurations for the error object being built. |
+ | options.error.code      | ```String```  | No | ```undefined``` | A unique value to reference the type of error that occurred. |
+ | options.internalMessage | ```String```  | No | ```undefined``` | Additional message to only display internally. |
+ | options.internalOnly    | ```Boolean``` | No | ```false``` | When true, error should only be displayed internally |
+ | options.level           | ```String```  | No | ```error``` | Error level (e.g. ```error```, ```fatal```, ```warn```) |
+ | options.messageData     | ```Object```  | No | ```undefined``` | Parameter data included in the error message. |
+ | options.referenceData   | ```Object```  | No | ```undefined``` | Data that may have caused the error. |
+ | options.statusCode      | ```Number```  | No | ```500``` | HTTP status code (e.g. 200, 400, 500) |
+ | remie | ```Object``` | Yes | ```undefined``` | An instance of the Remie class.  (e.g. ```new Remie({})```) |
+ 
+ See the [Create](#create) method documentation for more details.
+ 
+  * [Create from String](#create-from-string)
+  * [Create from Locale](#create-from-locale)
+  * [Create from Node.js Error](#create-from-nodejs-error)
+  * [Create from Remie Error](#create-from-remie-error)
+ 
+### Error Get
+Get an attribute in the Remie error instance by providing the ```attribute``` name as a parameter.  See available [Remie error attributes](#remie-error-attributes).
 
-## Methods
+```javascript
+error.get(attribute);
+```
+
+| Parameters | Type | Required | Default | Description |
+| -----------|------|----------|---------|-------------|
+| attribute | ```String``` | Yes | ```undefined``` | The name of the attribute to get. |
+
+
+### Error Set
+Set an attribute in the Remie error instance.  Provide the ```attribute``` name and new ```value``` as parameters.  See available [Remie error attributes](#remie-error-attributes).
+
+```javascript
+error.set(attribute, value);
+```
+
+| Parameters | Type | Required | Default | Description |
+| -----------|------|----------|---------|-------------|
+| attribute | ```String``` | Yes | ```undefined``` | The name of the attribute to set. |
+| value | ```Varies``` | Yes | ```undefined``` | The attribute's new value. |
+
+```javascript
+error.set("internalOnly", true);
+```
+
+### Sanitize
+Convert the Remie error instance into a JSON object that can then be passed to a client or user.  This removes attributes that are considered private or not needed by a client or user.  Include an attributes name as the key with a value of ```false``` in the options parameter to exclude it from the returned sanitized object.
+
+```javascript
+error.santitize(options);
+```
+
+| Parameters              | Type          | Required | Default   | Description |
+| ------------------------|---------------|----------|-----------|-------------|
+| options                 | ```Object```  | No | ```{}```        | Includes key/value pairs of options for the sanitize method. |
+| options.error.code      | ```Boolean``` | No | ```undefined``` | When true, includes ```error.code``` in the returned sanitized object. |
+| options.error.message   | ```Boolean``` | No | ```undefined``` | When true, includes ```error.message``` in the returned sanitized object. |
+| options.error.stack     | ```Boolean``` | No | ```undefined``` | When true, includes ```error.stack``` in the returned sanitized object. |
+| options.internalOnly    | ```Boolean``` | No | ```undefined``` | When true, returns undefined instead of a sanitized object. |
+| options.level           | ```Boolean``` | No | ```undefined``` | When true, includes ```level``` in the returned sanitized object. |
+| options.messageData     | ```Boolean``` | No | ```undefined``` | When true, includes ```messageData``` in the returned sanitized object. |
+| options.referenceData   | ```Boolean``` | No | ```undefined``` | When true, includes ```referenceData``` in the returned sanitized object. |
+| options.statusCode      | ```Boolean``` | No | ```undefined``` | When true, includes ```statusCode``` in the returned sanitized object. |
+
 
 ### toObject
-
-### sanitize
-
-### set
+Convert the Remie error instance into a JSON object.  This object can be passed from system to system as JSON, then be used to recreate the Remie error instance again.
+ 
+```javascript
+error.toObject();
+```
 
 # Examples
 A series of examples exist to help you understand how to use remie.  They are all located in the [examples](https://github.com/livio/remie/tree/develop/examples) folder.  You can follow these steps to use and play with the examples.
