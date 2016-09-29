@@ -378,7 +378,7 @@ When using i18next the locale will be placed in the ```error.code``` and ```opti
   * [get](#error-get)
   * [set](#error-set)
   * [sanitize](#sanitize)
-  * [toObject](#toObject)
+  * [toObject](#toobject)
 
 ### Build
 Builds the current Remie error instance.  You can build it from a ```string```, ```i18next locale```, ```Node.js error```, or an existing ```Remie error``` object.  The Remie [Create](#create) method calls this method internally, see the create method documentation for more details.
