@@ -387,18 +387,18 @@ Builds the current Remie error instance.  You can build it from a ```string```, 
  error.build(error, options, remie)
  ```
  
- | Parameters | Type | Required | Default | Description |
- | -----------|------|----------|---------|-------------|
- | error                   | ```String``` or ```Object``` | No | ```remie.defaultErrorMessage``` | The error that occurred. |
- | options                 | ```Object```  | No | ```{}``` | Configurations for the error object being built. |
- | options.error.code      | ```String```  | No | ```undefined``` | A unique value to reference the type of error that occurred. |
- | options.internalMessage | ```String```  | No | ```undefined``` | Additional message to only display internally. |
- | options.internalOnly    | ```Boolean``` | No | ```false``` | When true, error should only be displayed internally |
- | options.level           | ```String```  | No | ```error``` | Error level (e.g. ```error```, ```fatal```, ```warn```) |
- | options.messageData     | ```Object```  | No | ```undefined``` | Parameter data included in the error message. |
- | options.referenceData   | ```Object```  | No | ```undefined``` | Data that may have caused the error. |
- | options.statusCode      | ```Number```  | No | ```500``` | HTTP status code (e.g. 200, 400, 500) |
- | remie | ```Object``` | Yes | ```undefined``` | An instance of the Remie class.  (e.g. ```new Remie({})```) |
+| Parameters | Type | Required | Default | Description |
+| -----------|------|----------|---------|-------------|
+| error                   | ```String``` or ```Object``` | No | ```remie.defaultErrorMessage``` | The error that occurred. |
+| options                 | ```Object```  | No | ```{}``` | Configurations for the error object being built. |
+| options.error.code      | ```String```  | No | ```undefined``` | A unique value to reference the type of error that occurred. |
+| options.internalMessage | ```String```  | No | ```undefined``` | Additional message to only display internally. |
+| options.internalOnly    | ```Boolean``` | No | ```false``` | When true, error should only be displayed internally |
+| options.level           | ```String```  | No | ```error``` | Error level (e.g. ```error```, ```fatal```, ```warn```) |
+| options.messageData     | ```Object```  | No | ```undefined``` | Parameter data included in the error message. |
+| options.referenceData   | ```Object```  | No | ```undefined``` | Data that may have caused the error. |
+| options.statusCode      | ```Number```  | No | ```500``` | HTTP status code (e.g. 200, 400, 500) |
+| remie | ```Object``` | Yes | ```undefined``` | An instance of the Remie class.  (e.g. ```new Remie({})```) |
  
  See the [Create](#create) method documentation for more details.
  
