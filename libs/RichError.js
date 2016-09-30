@@ -97,9 +97,10 @@ class RichError{
     }
 
     let obj = {};
-    obj.error = (remie.i18next) ? new Error(remie.i18next.t(locale, options.i18next)) : new Error(locale);
+    obj.error = (remie.i18next) ? new Error(remie.i18next.t(locale, options.messageData)) : new Error(locale);
     obj.error.code = locale.toLowerCase();
     obj.statusCode = options.statusCode || this.guessStatusCodeOfLocale(locale, remie);
+    obj.messageData = options.messageData;
     return obj;
   };
 
@@ -132,7 +133,7 @@ class RichError{
     switch (locale) {
       case "server.400.forbidden":
         return 403;
-      case "server.400.notFound":
+      case "server.400.notfound":
         return 404;
       case "server.400.unauthorized":
         return 401;

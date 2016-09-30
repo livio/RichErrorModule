@@ -10,7 +10,7 @@ i18next.init({
       translation: {
         "server" : {
           "400" : {
-            "notFound": "The page {{- page}} could not be found",   //There is a '-' be fore page because the value is unescaped.  See http://i18next.com/translate/interpolation/
+            "notFound": "The page {{- page}} could not be found",   //There is a '-' before page because the value is unescaped.  See http://i18next.com/translate/interpolation/
             "forbidden": "The page is forbidden",
             "unauthorized": "You are not authorized to access this page"
           }
