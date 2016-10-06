@@ -17,6 +17,7 @@
   ],
   "dependencies": {
     "events": "1.1.1",
+
     "util": "0.10.3"
   },
   "description": "Rich Error Module",
@@ -26,6 +27,7 @@
     "codecov.io": "^0.1.6",
     "expect": "^1.20.2",
     "events": "^1.1.1",
+    "i18next": "^3.4.3",
     "istanbul": "^0.3.22",
     "mocha": "^2.5.3",
     "should": "^7.1.0",
