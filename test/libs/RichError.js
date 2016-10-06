@@ -6,8 +6,8 @@ let assert = require('chai').assert,
   waterfall = require('async/waterfall'),
   expect = require('chai').expect,
   i18next = require('i18next'),
-  Remie = (require("../libs/index.js")),
-	RichError = require("../libs/RichError.js"),
+  Remie = (require("../../libs/index.js")),
+	RichError = require("../../libs/RichError.js"),
 	path = require("path"),
 	_ = require("lodash");
 

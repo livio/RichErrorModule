@@ -1,2 +1,5 @@
 process.env.NODE_ENV = 'test';
-require("./RichError.js");
+
+let path = require('path');
+
+require(path.resolve(__dirname, "./libs") + path.sep);
