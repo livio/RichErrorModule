@@ -1,5 +1,26 @@
 let Remie = require('./index.js');
 
+
+let sanitizeError = function(instance, options = {}) {
+  let obj = {};
+
+  if(instance["error"]) {
+    if (options.message !== false && instance.error.message !== undefined) {
+      obj.message = instance.error.message;
+    }
+
+    if (options.code !== false && instance.error.code !== undefined) {
+      obj.code = instance.error.code;
+    }
+
+    if (options.stack === true && instance.error.stack !== undefined) {
+      obj.stack = instance.error.stack;
+    }
+  }
+
+  return obj;
+};
+
 class RichError{
   constructor(err, options, remie) {
     return this.build(err, options, remie)
@@ -210,37 +231,26 @@ class RichError{
   };
 
   sanitizeResponseObject(instance, options = {}, obj) {
-    let self = this,
-      includeErrorKey = false;
-
     for(var key in instance) {
       if (instance.hasOwnProperty(key)) {
         if (options[key] !== false && instance[key] !== undefined) {
           switch (key) {
+
+            case "internalMessage":
+            case "internalOnly":
+              break;
 
             default:
               obj[key] = instance[key];
               break;
 
             case "error":
-              if((options[key] === undefined || options[key].message !== false) && instance[key].message !== undefined) {
-                obj[key] = {
-                  message: instance[key].message
-                };
-              } else {
-                obj[key] = {};
-              }
-              includeErrorKey = true;
+              obj[key] = sanitizeError(instance, options[key]);
               break;
           }
         }
       }
     }
-
-    if(includeErrorKey) {
-      obj = self.sanitizeResponseObject(instance.error, options.error, obj);
-    }
-
     return obj;
   }
 

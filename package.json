@@ -65,6 +65,7 @@
   "scripts": {
     "report-coverage": "cat ./coverage/lcov.info | codecov",
     "test": "mocha",
+    "test-debug": "DEBUG=true mocha",
     "test-travis": "istanbul cover -x '**/test/**' _mocha -- -R spec"
   },
   "version": "0.0.10"

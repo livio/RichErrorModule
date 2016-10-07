@@ -1,22 +1,26 @@
-const DEBUG = false;
+// When enabled, additional debug messages will be displayed.
+const DEBUG = process.env.DEBUG || false;
 
-// Require modules and libs.
+// Require npm modules.
 let assert = require('chai').assert,
-  //async = require('async'),
-  waterfall = require('async/waterfall'),
   expect = require('chai').expect,
   i18next = require('i18next'),
-  Remie = (require("../../libs/index.js")),
-	RichError = require("../../libs/RichError.js"),
 	path = require("path"),
-	_ = require("lodash");
+  waterfall = require('async/waterfall');
 
+// Require local modules.
+let Remie = (require("../../libs/index.js")),
+  RichError = require("../../libs/RichError.js");
+
+// Types of errors that can be passed into Remie.
 const ERROR_TYPE_STRING = 'string',
     ERROR_TYPE_LOCALE = 'locale',
     ERROR_TYPE_SYSTEM = 'system',
     ERROR_TYPE_RICHERROR = 'richerror';
 
+// Current instance of remie.
 let remie;
+
 
 /* ************************************************** *
  * ******************** i18next Configurations
@@ -41,6 +45,7 @@ i18next.init({
   }
 });
 
+// Gets the expected HTTP status code from the i18next locale string.
 let getStatusCodeFromLocale = function(locale) {
   switch(locale) {
     case "server.400.notfound":     return 404;
@@ -55,6 +60,28 @@ let getStatusCodeFromLocale = function(locale) {
 /* ************************************************** *
  * ******************** Global Test Methods
  * ************************************************** */
+
+let validateSanitizedError = function (errorInstance, error, errorType, errorOptions = {}, sanitizeOptions = {}, cb) {
+  let tasks = [];
+
+  tasks.push(function (next) {
+    if( ! errorOptions.error) {
+      errorOptions.error = {};
+    }
+    errorOptions.error.stack = errorInstance.error.stack;
+    createExpectedError(error, errorType, errorOptions, next);
+  });
+
+  tasks.push(function (expectedError, next) {
+    createExpectedSanitizedError(expectedError, sanitizeOptions, next);
+  });
+
+  tasks.push(function (expectedSanitizedError, next) {
+    compareSanitizedError(errorInstance, expectedSanitizedError, sanitizeOptions, next);
+  });
+
+  waterfall(tasks, cb);
+};
 
 let validateError = function(errorInstance, error, errorType, options, cb) {
   let tasks = [];
@@ -398,6 +425,163 @@ let compareErrors = function(actualErrorInstance, expected, options, cb) {
   }
 };
 
+let createExpectedSanitizedError = function(error, options = {}, cb) {
+  let e;
+
+  if(error["internalOnly"] !== true) {
+    e = {};
+
+    for (var key in error) {
+      if (error.hasOwnProperty(key)) {
+        switch (key) {
+          case "internalOnly":
+          case "internalMessage":
+          default:
+            break;
+
+          case "level":
+          case "messageData":
+          case "referenceData":
+          case "statusCode":
+            if (options[key] !== false) {
+              e[key] = error[key];
+            }
+            break;
+
+          case "error":
+            if (options[key] !== false) {
+              if (e[key] === undefined) {
+                e[key] = {};
+              }
+
+              for (subKey in error[key]) {
+                if (error[key].hasOwnProperty(subKey)) {
+                  switch (subKey) {
+                    case "message":
+                    case "code":
+                    case "stack":
+                      if (options[key] && options[key][subKey] !== false) {
+                        if(error[key][subKey] !== undefined) {
+                          e[key][subKey] = error[key][subKey];
+                        }
+                      }
+                      break;
+
+                    default:
+                      break;
+                  }
+                }
+              }
+            }
+            break;
+        }
+      }
+    }
+  }
+
+  if(cb) {
+    cb(undefined, e);
+  } else {
+    return e;
+  }
+};
+
+let compareSanitizedError = function (e, expected, options, cb) {
+  let obj = e.sanitize(options);
+
+  //console.log("CompareSanitizedError(): Sanitized: %s", JSON.stringify(obj, undefined, 2));
+  //console.log("CompareSanitizedError(): Expected: %s", JSON.stringify(expected, undefined, 2));
+
+  if (expected === undefined) {
+    expect(obj).to.be.undefined;
+  } else {
+    // The object should be a defined object and not an instance of Rich Error.
+    expect(obj).to.exist;
+    expect(obj).to.not.be.an.instanceOf(RichError);
+    expect(obj).to.be.a('object');
+
+    // Make sure obj doesn't contain unexpected properties.
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        expect(expected[key]).to.exist;
+      }
+    }
+
+    // Check each property in obj to make sure it matches the expected.
+    for (var key in expected) {
+      if (expected.hasOwnProperty(key)) {
+        expect(obj[key]).to.exist;
+
+        switch (key) {
+          case "internalOnly":
+          case "internalMessage":
+          default:
+            throw new Error("Unhandled attribute " + key + " in expected value for a sanitized error.");
+            break;
+
+          case "statusCode":
+            expect(obj[key]).to.be.a('number');
+            assert.equal(obj[key], expected[key]);
+            break;
+
+          case "level":
+            expect(obj[key]).to.be.a('string');
+            assert.equal(obj[key], expected[key]);
+            break;
+
+          case "messageData":
+          case "referenceData":
+            expect(obj[key]).to.be.a('object');
+            assert.equal(obj[key], expected[key]);
+            break;
+
+          case "error":
+            expect(expected[key]).to.be.a('object');
+
+            // Error should be defined and an object
+            expect(obj[key]).to.exist;
+            expect(obj[key]).to.be.a('object');
+
+            for (var subKey in expected[key]) {
+              if (expected[key].hasOwnProperty(subKey)) {
+                expect(obj[key][subKey]).to.exist;
+
+                switch (subKey) {
+                  case "code":
+                  case "message":
+                  case "stack":
+                    expect(obj[key][subKey]).to.be.a('string');
+                    assert.equal(obj[key][subKey], expected[key][subKey]);
+                    break;
+
+                  default:
+                    throw new Error("Unhandled attribute "+ key +"." + subKey + " in expected value for a sanitized error.");
+                    break;
+                }
+              }
+            }
+            break;
+        }
+      }
+    }
+
+    // Make sure all methods are removed.
+    expect(obj.build).to.be.undefined;
+    expect(obj.get).to.be.undefined;
+    expect(obj.sanitize).to.be.undefined;
+    expect(obj.set).to.be.undefined;
+    expect(obj.toObject).to.be.undefined;
+  }
+
+  if(cb) {
+    cb(undefined, obj, expected);
+  }
+};
+
+
+/* ************************************************** *
+ * ******************** Unit Tests
+ * ************************************************** */
 
 describe('RichError', function() {
 
@@ -464,6 +648,71 @@ describe('RichError', function() {
       });
     });
 
+  });
+
+  describe('sanitize', function () {
+
+    it("of an error should return a subset of attributes", function (done) {
+      let error = "My Test Error",
+        options = {},
+        sanitizeOptions = {},
+        e = new RichError(error, options, remie);
+
+      validateSanitizedError(e, error, ERROR_TYPE_STRING, options, sanitizeOptions, done);
+    });
+
+    it("of an internal only error should return undefined", function (done) {
+      let error = "My Test Error",
+        options = { internalOnly: true },
+        sanitizeOptions = {},
+        e = new RichError(error, options, remie);
+
+      validateSanitizedError(e, error, ERROR_TYPE_STRING, options, sanitizeOptions, done);
+    });
+
+    it("should remove internalMessages", function (done) {
+      let error = "My Test Error",
+        options = { internalMessage: "this is an internal Message" },
+        sanitizeOptions = {},
+        e = new RichError(error, options, remie);
+
+      assert.equal(e.internalMessage, options.internalMessage);
+
+      validateSanitizedError(e, error, ERROR_TYPE_STRING, options, sanitizeOptions, function(err, sanitized, expected) {
+        expect(sanitized["internalMessage"]).to.be.undefined;
+        done(err);
+      });
+    });
+
+    it("should allow toggling off of sanitize options", function (done) {
+      let error = "My Test Error",
+        options = { internalMessage: "this is an internal Message" },
+        sanitizeOptions = { error: false, level: false, statusCode: false },
+        e = new RichError(error, options, remie);
+
+      expect(e["error"]).to.exist;
+      expect(e["level"]).to.exist;
+      expect(e["statusCode"]).to.exist;
+
+      validateSanitizedError(e, error, ERROR_TYPE_STRING, options, sanitizeOptions, function (err, sanitized, expected) {
+        expect(sanitized["error"]).to.be.undefined;
+        expect(sanitized["level"]).to.be.undefined;
+        expect(sanitized["statusCode"]).to.be.undefined;
+        assert.deepEqual(sanitized, {});
+        done(err);
+      });
+    });
+
+    it("should allow toggling on of sanitize options", function (done) {
+      let error = "My Test Error",
+        options = { internalMessage: "this is an internal Message" },
+        sanitizeOptions = { error: { stack: true }},
+        e = new RichError(error, options, remie);
+
+      validateSanitizedError(e, error, ERROR_TYPE_STRING, options, sanitizeOptions, function (err, sanitized, expected) {
+        done(err);
+      });
+    });
   });
 
 });
