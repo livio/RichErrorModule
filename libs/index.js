@@ -4,8 +4,7 @@
 
 var i18next = require('i18next'), 
   EventEmitter = require('events').EventEmitter,
-  inherits = require('util').inherits,
-  RichError;
+  inherits = require('util').inherits;
 
 const DEFAULT_ERROR_MESSAGE = "Internal server error!",
   DEFAULT_ERROR_LOCALE = "server.500.generic",
@@ -18,10 +17,8 @@ const DEFAULT_ERROR_MESSAGE = "Internal server error!",
 
 class Remie {
   constructor(options = {}) {
-    // Must require RichError here so it can access the
-    // static methods for Remie.
-    RichError = require('./RichError.js');
-
+    // Must require RichError here to access Remie's static methods.
+    this.RichError = require('./RichError.js');
     this.set(options);
 
     return this;
@@ -29,15 +26,15 @@ class Remie {
 
   createInternal(err, options = {}) {
     options.internalOnly = true;
-    return new RichError(err, options, this);
+    return new this.RichError(err, options, this);
   };
 
   copy(richError = {}, options) {
-    return new RichError(richError.toObject(), options, this);
+    return new this.RichError(richError.toObject(), options, this);
   };
 
   create(err, options = {}) {
-    return new RichError(err, options, this)
+    return new this.RichError(err, options, this)
   }
 
   get(key) {
