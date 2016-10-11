@@ -17,7 +17,6 @@
   ],
   "dependencies": {
     "events": "1.1.1",
-
     "util": "0.10.3"
   },
   "description": "Rich Error Module",
@@ -68,5 +67,5 @@
     "test-debug": "DEBUG=true mocha",
     "test-travis": "istanbul cover -x '**/test/**' _mocha -- -R spec"
   },
-  "version": "0.1.1"
+  "version": "0.1.2"
 }

@@ -2,8 +2,7 @@
  * ******************** Module Variables & Constants
  * ************************************************** */
 
-var i18next = require('i18next'), 
-  EventEmitter = require('events').EventEmitter,
+var EventEmitter = require('events').EventEmitter,
   inherits = require('util').inherits;
 
 const DEFAULT_ERROR_MESSAGE = "Internal server error!",
