@@ -92,10 +92,10 @@ class RichError{
       obj.level = Remie.ERROR_LEVEL_ERROR;
     }
 
-    if(options.statusCode) {
-      obj.statusCode = options.statusCode;
-    } else if( ! obj.statusCode) {
-      obj.statusCode = 500;
+    if(options.httpStatusCode) {
+      obj.httpStatusCode = options.httpStatusCode;
+    } else if( ! obj.httpStatusCode) {
+      obj.httpStatusCode = 500;
     }
 
     return obj;
@@ -120,7 +120,7 @@ class RichError{
     let obj = {};
     obj.error = (remie.i18next) ? new Error(remie.i18next.t(locale, options.messageData)) : new Error(locale);
     obj.error.code = locale.toLowerCase();
-    obj.statusCode = options.statusCode || this.guessStatusCodeOfLocale(locale, remie);
+    obj.httpStatusCode = options.httpStatusCode || this.guessStatusCodeOfLocale(locale, remie);
     obj.messageData = options.messageData;
     return obj;
   };
@@ -204,7 +204,7 @@ class RichError{
     this.referenceData = obj.referenceData;
 
     // HTTP status code associated with the error.
-    this.statusCode = obj.statusCode;
+    this.httpStatusCode = obj.httpStatusCode;
 
     // Handle the creation of an internal message.
     if(remie && this.internalMessage) {
@@ -226,7 +226,7 @@ class RichError{
       level: this.level,
       messageData: this.messageData,
       referenceData: this.referenceData,
-      statusCode: this.statusCode
+      httpStatusCode: this.httpStatusCode
     };
   };
 

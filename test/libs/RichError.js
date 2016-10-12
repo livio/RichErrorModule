@@ -142,10 +142,10 @@ let validateErrorInstance = function(e, cb) {
   expect(e.level).to.be.a('string');
 
   // Status code should be defined and a number from 100 - 599 (inclusive)
-  expect(e.statusCode).to.exist;
-  expect(e.statusCode).to.be.a('number');
-  expect(e.statusCode).to.be.at.least(100);
-  expect(e.statusCode).to.be.below(600);
+  expect(e.httpStatusCode).to.exist;
+  expect(e.httpStatusCode).to.be.a('number');
+  expect(e.httpStatusCode).to.be.at.least(100);
+  expect(e.httpStatusCode).to.be.below(600);
 
   // Begin Optional fields
 
@@ -210,8 +210,8 @@ let validateErrorDefaults = function(e, errorType, options = {}, cb) {
   }
 
   // If not specified and not of error type locale, the status code should be 500.
-  if(options.statusCode === undefined && errorType !== ERROR_TYPE_LOCALE) {
-    expect(e.statusCode).to.equal(500);
+  if(options.httpStatusCode === undefined && errorType !== ERROR_TYPE_LOCALE) {
+    expect(e.httpStatusCode).to.equal(500);
   }
 
   if(options.messageData === undefined) {
@@ -263,10 +263,10 @@ let validateToObject = function(e, cb) {
   expect(obj.level).to.be.a('string');
 
   // Status code should be defined and a number from 100 - 599 (inclusive)
-  expect(obj.statusCode).to.exist;
-  expect(obj.statusCode).to.be.a('number');
-  expect(obj.statusCode).to.be.at.least(100);
-  expect(obj.statusCode).to.be.below(600);
+  expect(obj.httpStatusCode).to.exist;
+  expect(obj.httpStatusCode).to.be.a('number');
+  expect(obj.httpStatusCode).to.be.at.least(100);
+  expect(obj.httpStatusCode).to.be.below(600);
 
   // Begin Optional fields
 
@@ -308,7 +308,7 @@ let createExpectedError = function (error, errorType, options = {}, cb) {
     },
     internalOnly: false,
     level: 'error',
-    statusCode: 500
+    httpStatusCode: 500
   };
 
   // Note:  We use a hardcoded type to test Remie's error type detection.
@@ -352,14 +352,14 @@ let createExpectedError = function (error, errorType, options = {}, cb) {
     e.referenceData = options.referenceData;
   }
 
-  // Locale errors should have a specific statusCode and code.
+  // Locale errors should have a specific httpStatusCode and code.
   if(errorType === ERROR_TYPE_LOCALE) {
-    e.statusCode = getStatusCodeFromLocale(error);
+    e.httpStatusCode = getStatusCodeFromLocale(error);
     e.error.code = error;
   }
 
-  if(options.statusCode) {
-    e.statusCode = options.statusCode;
+  if(options.httpStatusCode) {
+    e.httpStatusCode = options.httpStatusCode;
   }
 
   if(options.error) {
@@ -442,7 +442,7 @@ let createExpectedSanitizedError = function(error, options = {}, cb) {
           case "level":
           case "messageData":
           case "referenceData":
-          case "statusCode":
+          case "httpStatusCode":
             if (options[key] !== false) {
               e[key] = error[key];
             }
@@ -519,7 +519,7 @@ let compareSanitizedError = function (e, expected, options, cb) {
             throw new Error("Unhandled attribute " + key + " in expected value for a sanitized error.");
             break;
 
-          case "statusCode":
+          case "httpStatusCode":
             expect(obj[key]).to.be.a('number');
             assert.equal(obj[key], expected[key]);
             break;
@@ -687,17 +687,17 @@ describe('RichError', function() {
     it("should allow toggling off of sanitize options", function (done) {
       let error = "My Test Error",
         options = { internalMessage: "this is an internal Message" },
-        sanitizeOptions = { error: false, level: false, statusCode: false },
+        sanitizeOptions = { error: false, level: false, httpStatusCode: false },
         e = new RichError(error, options, remie);
 
       expect(e["error"]).to.exist;
       expect(e["level"]).to.exist;
-      expect(e["statusCode"]).to.exist;
+      expect(e["httpStatusCode"]).to.exist;
 
       validateSanitizedError(e, error, ERROR_TYPE_STRING, options, sanitizeOptions, function (err, sanitized, expected) {
         expect(sanitized["error"]).to.be.undefined;
         expect(sanitized["level"]).to.be.undefined;
-        expect(sanitized["statusCode"]).to.be.undefined;
+        expect(sanitized["httpStatusCode"]).to.be.undefined;
         assert.deepEqual(sanitized, {});
         done(err);
       });

@@ -28,7 +28,7 @@ let remie = new Remie({
 // Create a new error using a locale for "404 Not Found".
 // Specify the i18next page parameter as "free tacos".
 let error = remie.create("server.400.notFound", {
-  i18next: {
+  messageData: {
     page: "http://livio.io/free/tacos"
   }
 });
