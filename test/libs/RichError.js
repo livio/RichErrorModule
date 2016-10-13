@@ -159,6 +159,11 @@ let validateErrorInstance = function(e, cb) {
     expect(e.referenceData).to.be.a('object');
   }
 
+  // Sanitize options should be defined and an object.
+  if(e.sanitizeOptions) {
+    expect(e.sanitizeOptions).to.be.a('object');
+  }
+
   // If defined, internal message should be a string.
   if(e.internalMessage) {
     expect(e.internalMessage).to.be.a('string');
@@ -228,6 +233,11 @@ let validateErrorDefaults = function(e, errorType, options = {}, cb) {
     expect(e.internalMessage).to.be.undefined;
   }
 
+  // If not specified, sanitize options should be undefined.
+  if(options.sanitizeOptions === undefined) {
+    expect(e.sanitizeOptions).to.be.undefined;
+  }
+
   if(cb) {
     cb();
   }
@@ -278,6 +288,10 @@ let validateToObject = function(e, cb) {
   // If defined, reference data should be an object.
   if(obj.referenceData) {
     expect(obj.referenceData).to.be.a('object');
+  }
+
+  if(obj.sanitizeOptions) {
+    expect(obj.sanitizeOptions).to.be.a('object');
   }
 
   // If defined, internal message should be a string.
@@ -362,6 +376,10 @@ let createExpectedError = function (error, errorType, options = {}, cb) {
     e.httpStatusCode = options.httpStatusCode;
   }
 
+  if(options.sanitizeOptions) {
+    e.sanitizeOptions = options.sanitizeOptions;
+  }
+
   if(options.error) {
     if (options.error.code) {
       e.error.code = options.error.code;
@@ -434,6 +452,7 @@ let createExpectedSanitizedError = function(error, options = {}, cb) {
     for (var key in error) {
       if (error.hasOwnProperty(key)) {
         switch (key) {
+          case "sanitizeOptions":
           case "internalOnly":
           case "internalMessage":
           default:
@@ -515,6 +534,7 @@ let compareSanitizedError = function (e, expected, options, cb) {
         switch (key) {
           case "internalOnly":
           case "internalMessage":
+          case "sanitizeOptions":
           default:
             throw new Error("Unhandled attribute " + key + " in expected value for a sanitized error.");
             break;
@@ -713,6 +733,23 @@ describe('RichError', function() {
         done(err);
       });
     });
+
+    it("should handle default sanitize options", function(done) {
+      let error = "My Test Error",
+        options = { internalMessage: "this is an internal Message" },
+        sanitizeOptions = { error: { stack: true }};
+
+      remie = new Remie({
+        defaultSanitizeOptions: sanitizeOptions
+      });
+
+      let e = new RichError(error, options, remie);
+
+      validateSanitizedError(e, error, ERROR_TYPE_STRING, options, sanitizeOptions, function (err, sanitized, expected) {
+        done(err);
+      });
+    });
+
   });
 
 });

@@ -333,6 +333,7 @@ You can configure the Remie instance at anytime using the following attributes:
 | defaultErrorMessage | ```String``` |  ```"Internal server error!"``` | Default Remie error message used when an error message is not provided. |
 | defaultErrorLocale | ```String``` |  ```"server.500.generic"``` | Default Remie error locale for i18next used when an error locale is required, but not provided. |
 | defaultErrorStatusCode | ```Number``` |  ```500``` | Default Remie error status code used when an error status code is not provided. |
+| defaultSanitizeOptions | ```Object``` | ```{}``` | Default options passed to the Remie error sanitize method. |
 | i18next | ```Object``` |  ```undefined``` | Instance of i18next used for translation of locales. |
 
 To configure a Remie instance while being created pass values into the constructor as an object.

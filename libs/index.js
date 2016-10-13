@@ -7,7 +7,8 @@ var EventEmitter = require('events').EventEmitter,
 
 const DEFAULT_ERROR_MESSAGE = "Internal server error!",
   DEFAULT_ERROR_LOCALE = "server.500.generic",
-  DEFAULT_ERROR_STATUS_CODE = 500;
+  DEFAULT_ERROR_STATUS_CODE = 500,
+  DEFAULT_SANITIZE_OPTIONS = undefined;
 
 
 /* ************************************************** *
@@ -51,6 +52,7 @@ class Remie {
     this.defaultErrorMessage = options.defaultErrorMessage || DEFAULT_ERROR_MESSAGE;
     this.defaultErrorLocale = options.defaultErrorLocale || DEFAULT_ERROR_LOCALE;
     this.defaultErrorStatusCode = options.defaultErrorStatusCode || DEFAULT_ERROR_STATUS_CODE;
+    this.defaultSanitizeOptions = options.defaultSanitizeOptions || DEFAULT_SANITIZE_OPTIONS;
   }
 
   static get ERROR_LEVEL_FATAL() { return "fatal" }

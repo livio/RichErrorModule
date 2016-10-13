@@ -70,6 +70,10 @@ class RichError{
       }
     }
 
+    if( ! options.sanitizeOptions) {
+      options.sanitizeOptions = remie.defaultSanitizeOptions;
+    }
+
     obj = self.applyBuildOptions(options, obj);
     self.set(obj, remie);
     return this;
@@ -96,6 +100,10 @@ class RichError{
       obj.httpStatusCode = options.httpStatusCode;
     } else if( ! obj.httpStatusCode) {
       obj.httpStatusCode = 500;
+    }
+
+    if(options.sanitizeOptions) {
+      obj.sanitizeOptions = options.sanitizeOptions;
     }
 
     return obj;
@@ -185,6 +193,9 @@ class RichError{
       this.error.stack = obj.error.stack;
     }
 
+    // HTTP status code associated with the error.
+    this.httpStatusCode = obj.httpStatusCode;
+
     // When true, the error should not be shown to an external client.
     this.internalOnly = obj.internalOnly;
 
@@ -203,8 +214,8 @@ class RichError{
     // Data that may have caused or is related to the error.
     this.referenceData = obj.referenceData;
 
-    // HTTP status code associated with the error.
-    this.httpStatusCode = obj.httpStatusCode;
+    // The default options used by the sanitize method
+    this.sanitizeOptions = obj.sanitizeOptions;
 
     // Handle the creation of an internal message.
     if(remie && this.internalMessage) {
@@ -221,12 +232,13 @@ class RichError{
         message: this.error.message,
         stack: this.error.stack
       },
+      httpStatusCode: this.httpStatusCode,
       internalOnly: this.internalOnly,
       internalMessage: this.internalMessage,
       level: this.level,
       messageData: this.messageData,
       referenceData: this.referenceData,
-      httpStatusCode: this.httpStatusCode
+      sanitizeOptions: this.sanitizeOptions
     };
   };
 
@@ -238,6 +250,7 @@ class RichError{
 
             case "internalMessage":
             case "internalOnly":
+            case "sanitizeOptions":
               break;
 
             default:
@@ -254,9 +267,13 @@ class RichError{
     return obj;
   }
 
-  sanitize(options = {}) {
+  sanitize(options) {
     let self = this,
       obj = {};
+
+    if(options === undefined) {
+      options = self.sanitizeOptions || {};
+    }
 
     // Do not return internal only errors to a client.
     if(self.internalOnly === true || options.internalOnly === true) {
