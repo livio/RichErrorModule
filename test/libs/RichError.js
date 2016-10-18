@@ -617,8 +617,16 @@ describe('RichError', function() {
   
   describe('build', function() {
 
-    it('from a string', function (done) {
+    it('from a string literal', function (done) {
       let error = "My error string",
+        options = {},
+        e = new RichError(error, options, remie);
+
+      validateError(e, error, ERROR_TYPE_STRING, options, done);
+    });
+
+    it('from a String object', function (done) {
+      let error = new String("My error string"),
         options = {},
         e = new RichError(error, options, remie);
 
