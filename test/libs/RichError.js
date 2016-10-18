@@ -752,4 +752,110 @@ describe('RichError', function() {
 
   });
 
+  describe('create', function() {
+
+    it("should build a RichError", function(done) {
+      let error = "My error string",
+        options = {},
+        e = remie.create(error, options);
+
+      validateError(e, error, ERROR_TYPE_STRING, options, done);
+    });
+
+    it("internal should build an internal only error", function (done) {
+      let error = "My Test Error",
+        e = remie.createInternal(error, {});
+
+      validateError(e, error, ERROR_TYPE_STRING, { internalOnly: true }, done);
+    });
+
+  });
+  
+  describe('copy', function () {
+
+    it("should copy an existing error", function (done) {
+      let error = "My error string",
+        options = {},
+        e = remie.create(error, options),
+        c = remie.copy(e);
+
+      validateError(e, error, ERROR_TYPE_STRING, options, function(err) {
+        if(err) {
+          done(err);
+        } else {
+          validateError(c, error, ERROR_TYPE_STRING, options, function (err) {
+            if(err) {
+              done(err);
+            } else {
+              compareErrors(c, e, options, done);
+            }
+          });
+        }
+      });
+    });
+
+    it("should apply options to a copied error", function (done) {
+      let error = "My error string",
+        errorOptions = {},
+        copyOptions = { internalOnly: true },
+        e = remie.create(error, {}),
+        c = remie.copy(e, copyOptions);
+
+      validateError(e, error, ERROR_TYPE_STRING, errorOptions, function(err) {
+        if(err) {
+          done(err);
+        } else {
+
+          validateError(c, error, ERROR_TYPE_STRING, copyOptions, function (err) {
+            if(err) {
+              done(err);
+            } else {
+              e.internalOnly = true;
+              compareErrors(c, e, copyOptions, done);
+            }
+          });
+        }
+      });
+    });
+
+  });
+
+  describe('static constant', function() {
+
+    it("s for error levels should be strings", function(done) {
+      expect(Remie.ERROR_LEVEL_FATAL).to.be.a('string');
+      expect(Remie.ERROR_LEVEL_DEBUG).to.be.a('string');
+      expect(Remie.ERROR_LEVEL_ERROR).to.be.a('string');
+      expect(Remie.ERROR_LEVEL_INFO).to.be.a('string');
+      expect(Remie.ERROR_LEVEL_TRACE).to.be.a('string');
+      expect(Remie.ERROR_LEVEL_WARN).to.be.a('string');
+      done();
+    });
+
+    it("s for error levels should have expected values", function(done) {
+      expect(Remie.ERROR_LEVEL_FATAL).to.equal("fatal");
+      expect(Remie.ERROR_LEVEL_DEBUG).to.equal("debug");
+      expect(Remie.ERROR_LEVEL_ERROR).to.equal("error");
+      expect(Remie.ERROR_LEVEL_INFO).to.equal("info");
+      expect(Remie.ERROR_LEVEL_TRACE).to.equal("trace");
+      expect(Remie.ERROR_LEVEL_WARN).to.equal("warn");
+      done();
+    });
+
+  });
+
+  describe('get', function () {
+
+    it("should return the named attribute's value", function (done) {
+      let error = "My error string",
+        options = {},
+        e = remie.create(error, options);
+
+      expect(e.get("internalOnly")).to.be.a("boolean");
+      expect(e.get("internalOnly")).to.equal(false);
+      done();
+    });
+
+  });
+
 });
