@@ -116,7 +116,13 @@ class RichError{
 
     let obj = {};
     obj.error = err;
-    obj.error.code = (err.code) ? err.code.toLowerCase() : undefined;
+
+    if(err.code) {
+      if(typeof err.code.toLowerCase == 'function') {
+        obj.error.code = err.code.toLowerCase();
+      }
+      obj.error.code = err.code;
+    }
     return obj;
   };
 
@@ -127,9 +133,14 @@ class RichError{
 
     let obj = {};
     obj.error = (remie.i18next) ? new Error(remie.i18next.t(locale, options.messageData)) : new Error(locale);
-    obj.error.code = locale.toLowerCase();
     obj.httpStatusCode = options.httpStatusCode || this.guessStatusCodeOfLocale(locale, remie);
     obj.messageData = options.messageData;
+
+    if(typeof locale.toLowerCase == 'function') {
+        obj.error.code = locale.toLowerCase();
+    }
+    obj.error.code = locale;
+
     return obj;
   };
 
@@ -140,7 +151,14 @@ class RichError{
 
     let obj = {};
     obj.error = new Error(errorString);
-    obj.error.code = (options.error && options.error.code) ? options.code.toLowerCase() : undefined;
+
+    if(options.error && options.error.code) {
+      if(typeof options.error.code.toLowerCase == 'function') {
+        obj.error.code = options.error.code.toLowerCase();
+      }
+      obj.error.code = options.error.code;
+    }
+
     return obj;
   };
 
